@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    #app{
+      position: relative;
+    }
+    #indicator{
+      position: absolute;
+      display: flex;
+      top: 5%;
+      left: 5%;
+    }
+    .indicator-icon{
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: rgba(255,255,255,.3);
+      /*当border的背景颜色为透明时 background-color会蔓延到border上 所以要通过
+      background-clip让背景颜色仅在内容区上 */
+      margin: 0 4px;
+    }
+    .indicator-icon.active{
+      background-color: rgba(255,255,255,.8);
+      border: 5px solid rgba(255,255,255,1);
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <img src="https://img20.360buyimg.com/pop/s1180x940_jfs/t1/161738/21/1114/76533/5ff437efEa24ac2f5/2a79047e1e3f805a.jpg.webp">
+    <div id="indicator">
+      <div class="indicator-icon active"></div>
+      <div class="indicator-icon"></div>
+      <div class="indicator-icon"></div>
+      <div class="indicator-icon"></div>
+    </div>
+  </div>
+</body>
+<script>
+</script>
+</html>
