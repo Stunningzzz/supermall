@@ -15,14 +15,15 @@
 <script>
 export default {
   name: "TopNavBar",
-  computed:{
-  }
 }
 </script>
 
 <style scoped>
   .top-nav-bar{
-
+    position: fixed;
+    top:0;
+    width: 100%;
+    z-index: 20;
     line-height: 44px;
     display: flex;
     text-align: center;

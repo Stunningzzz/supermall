@@ -74,7 +74,7 @@ let methods = {
     if (Math.abs(distance) >= this.width * this.ratio)
     {
       distance < 0 ? this.scrollTo(1):this.scrollTo(0);
-    } else
+    } else if (distance != 0)
     {
       distance < 0 ? this.scrollTo(0):this.scrollTo(1);
     }

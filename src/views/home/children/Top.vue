@@ -10,7 +10,7 @@
 import TopNavBar from "components/common/topnavbar/TopNavBar";
 
 export default {
-  name: "HomeTop",
+  name: "Top",
   components:{
     TopNavBar
   }
