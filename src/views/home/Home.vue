@@ -1,45 +1,46 @@
 <template>
   <div id="home">
-    <top/>
+    <home-top/>
     <tab-control class="placeHolder"
-                 :titles="['流行','新款','精选']"
-                 :disabled="scrolling"
                  v-show="showPlaceHolder"
+                 :titles="['流行','新款','精选']" :disabled="scrolling"
                  ref="tabControl1"
                  @tabClick="tabClick"/>
-    <scroll class="scroll" ref="scroll" @scroll="scroll" @scrollEnd="scrollEnd" @pullingUp="pullingUp">
-      <swiper :width="320" :height="200" :swiper-items="swiperItems" :pTransTime="300"
-              @SwiperHasLoad="SwiperHasLoad"/>
-      <recommend :recommends="recommends"/>
+    <scroll class="scroll"
+            ref="scroll"
+            @scroll="scroll" @scrollEnd="scrollEnd" @pullingUp="pullingUp">
+      <home-swiper :swiper-items="swiperItems"
+                   @SwiperHasLoad="SwiperHasLoad"/>
+      <home-reco :recommends="recommends"/>
       <tab-control class="tab-control"
-                   :titles="['流行','新款','精选']"
+                   :titles="['流行','新款','精选']" :disabled="scrolling"
                    ref="tabControl2"
                    @tabClick="tabClick"/>
       <good-list :goods="goods" :type="curType"/>
     </scroll>
-    <back-top v-show="showBack" @click.native="backTop"/>
+    <back-top v-show="showBack"
+              @click.native="backTop"/>
   </div>
 </template>
 
 <script>
-import Top from "./children/Top";
+import HomeTop from "./children/HomeTop";
 import Scroll from "components/common/scroll/Scroll";
-import Swiper from "components/common/swiper/Swiper";
-import Recommend from "./children/Recommend";
+import HomeSwiper from "./children/HomeSwiper";
+import HomeReco from "./children/HomeReco";
 import TabControl from "components/content/TabControl";
 import GoodList from "components/content/goods/GoodList";
 import BackTop from "components/content/backtop/BackTop";
 
 import {debounce} from "common/utils";
 
-
 export default {
   name: "Home",
   components: {
-    Top,
+    HomeTop,
     Scroll,
-    Swiper,
-    Recommend,
+    HomeSwiper,
+    HomeReco,
     TabControl,
     GoodList,
     BackTop
@@ -729,7 +730,7 @@ export default {
       },
       offsetTop: 0,
       showPlaceHolder: false,
-      scrolling:false
+      scrolling: false
     }
   },
   computed: {
@@ -742,7 +743,7 @@ export default {
     tabClick(index)
     {
       // 没有滚完不能切换
-      if (this.scrolling)return
+      if (this.scrolling) return
       switch (index)
       {
         case 0:
@@ -791,7 +792,8 @@ export default {
         }
       }
     },
-    scrollEnd(){
+    scrollEnd()
+    {
       this.scrolling = false;
     },
     pullingUp()
@@ -822,25 +824,21 @@ export default {
             });
       }
       this.$refs.scroll.finishPullUp();
-    }
-    ,
+    },
     backTop()
     {
       this.$refs.scroll.scrollTo({x: 0,y: 0},500);
-    }
-    ,
+    },
+
   },
   mounted()
   {
     let refresh = debounce(this.$refs.scroll.refresh);
-    let count = 0;
     this.$bus.$on('itemImgLoad',() =>
     {
-      count++;
       refresh();
     })
   },
-
 }
 </script>
 

@@ -1,18 +1,13 @@
 <template>
-  <div class="swiper" :style="swiperStyle">
+  <div class="swiper">
     <div class="wrapper"
-         ref="wrapper"
-         :style="wrapperStyle"
-         @touchstart="touchstart"
-         @touchmove="touchmove"
-         @touchend="touchend">
-      <a v-for="item in dItems" :href="item.href" :style="swiperStyle">
-        <img :src="item.src" @load="imgHasLoad">
-      </a>
+         ref="wrapper" :style="wrapperStyle"
+         @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend">
+      <slot></slot>
     </div>
-    <div class="indicator" v-show="this.swiperItems.length > 1 && this.showIndi">
+    <div class="indicator" v-show="this.showIndicator">
       <slot name="indicator">
-        <div class="indicator-icon" :class="iconClass(index)" v-for="(item,index) in swiperItems">
+        <div class="indicator-icon" :class="iconClass(num)" v-for="num in (count - 2)">
         </div>
       </slot>
     </div>
@@ -21,14 +16,6 @@
 
 <script>
 let methods = {
-  imgHasLoad()
-  {
-    if (!this.isLoad)
-    {
-      this.isLoad = true;
-      this.$emit('SwiperHasLoad');
-    }
-  },
   touchstart(e)
   {
     if (this.scrolling)
@@ -43,7 +30,7 @@ let methods = {
     this.moving = true;
     this.preX = e.changedTouches[0].clientX;
     this.startLeft = this.left;
-    // 这个不能省略 因为在touchmove的时候不能有动画
+    // 这个不能省略 因为在touchmove的时候不能有动画的延迟
     this.dTransTime = 0;
     this.stopTimer();
   },
@@ -67,12 +54,12 @@ let methods = {
     // this.left >= 0
     // 表示到了第一张还要往左边拖 因为第一张是实际上的最后一张 所以要返回真正的最后一张
 
-    // this.left <= -(this.dItems.length - 1) * this.width
+    // this.left <= -(this.count - 1) * this.width
     // 表示到了最后一张还要往右边拖 因为第一张是实际上的第一张 所以要返回真正的第一张
     // 不直接设置为 === 是因为有误差存在
-    if (this.left >= 0 || this.left <= -(this.dItems.length - 1) * this.width)
+    if (this.left >= 0 || this.left <= -(this.count - 1) * this.width)
     {
-      this.index = this.index === 0 ? this.dItems.length - 2 : 1;
+      this.index = this.index === 0 ? this.count - 2 : 1;
       // 在touchstart的时候已经关掉动画效果了 所以这里不会有动画
       this.dTransTime = 0;
       this.left = -this.index * this.width;
@@ -101,14 +88,13 @@ let methods = {
   // 从当前left带动画的移动到index+direction所在left
   scrollTo(direction)
   {
-    console.log('scrollTo ----',direction);
     this.curIndex = this.index;
     // 最终下标
     this.index += direction;
     // 最终下标的left值
     let end = -this.index * this.width;
     // 设置动画所需时间
-    this.dTransTime = Math.abs(this.left - end) / this.width * this.pTransTime;
+    this.dTransTime = Math.abs(this.left - end) / this.width * this.transTime;
     // 设置当前在滚动 滚动状态下不能拖动
     this.scrolling = true;
     // 设置left 动画开始
@@ -120,9 +106,9 @@ let methods = {
       this.scrolling = false;
       // index为0        表示到了前面的最后一张 那么就要回到真正的最后一张 下标为 0
       // index为length-1 表示到了后面的第一张 那么就要回到真正的第一张 下标为    length - 2
-      if (this.index === 0 || this.index === this.dItems.length - 1)
+      if (this.index === 0 || this.index === this.count - 1)
       {
-        this.index = this.index === 0 ? this.dItems.length - 2 : 1;
+        this.index = this.index === 0 ? this.count - 2 : 1;
         // 因为要秒切 所以设置动画时间为0
         this.dTransTime = 0;
         // 设置left实现跳转
@@ -149,73 +135,61 @@ let methods = {
   // 设置当前导航的class是否添加
   iconClass(index)
   {
-    return {active: this.curIndex - 1 === index}
+    return {active: this.curIndex  === index}
   },
 };
 export default {
   methods,
   name: "Swiper",
   props: {
-    // 传入的对象数组 每个对象都有href和src属性
-    swiperItems: {
-      type: Array,
-      default()
-      {
-        return []
-      },
-    },
-    // 设置轮播图的宽高
-    width: Number,
-    height: Number,
-    interval: {   // 轮播时间
+    // 轮播时间
+    interval: {
       type: Number,
       default: 3000
     },
-    pTransTime: { // 切图时间
+    // 切换一张图片的时间
+    transTime: {
       type: Number,
       default: 300
     },
-    showIndi: { // 是否显示导航按钮
+    // 是否显示导航按钮
+    showIndicator: {
       type: Boolean,
       default: true
+    },
+    // 滚动多少切到下一张
+    ratio:{
+      type:Number,
+      default:0.25
     }
   },
   data()
   {
     return {
+      // 整个swiper的宽度同时也是每一张图片的宽度
+      width:0,
+      // 用户看到的图片数量
+      count:4,
       // 当前轮播或者拖动到的下标
       index: 1,
       // list的left
       left: 0,
-      // 加完前后两张的对象数组
-      dItems: [],
       // 是否正在滚动
       scrolling: false,
-      // 滚动多少切到下一张
-      ratio: 0.25,
       // 当前轮播的下标(不包括拖动) 用于导航按钮
       curIndex: 1,
       dTransTime: 0,
-      isLoad: false,
+      // 是否可以滑动 用于标识touchstart是否有效
       moving:false,
+      // scrollTo切换完成后的回调 用于保存scrolling状态下的touchstart
       callback:null
     }
   },
   computed: {
-    // 轮博图样式
-    swiperStyle()
-    {
-      return {
-        width: this.width + 'px',
-        height: this.height + 'px'
-      }
-    },
     // list样式
     wrapperStyle()
     {
       return {
-        width: (this.dItems.length) * this.width + 'px',
-        height: this.height + 'px',
         left: this.left + 'px',
         transition: `left ease-in-out ${ this.dTransTime }ms`
       }
@@ -223,13 +197,22 @@ export default {
   },
   mounted()
   {
-    let temp = this.swiperItems;
-    // 设置dItems
-    this.dItems = [temp[temp.length - 1],...temp,temp[0]];
+    // 插入前后两张额外的图片
+    let wrapper = this.$refs.wrapper;
+    let firstChild = wrapper.firstElementChild.cloneNode(true);
+    let lastChild = wrapper.lastElementChild.cloneNode(true);
+    wrapper.appendChild(firstChild);
+    wrapper.insertBefore(lastChild,wrapper.firstElementChild);
+
+    this.count = wrapper.childElementCount;
+    // 计算Swiper的宽度
+    this.width = parseInt(getComputedStyle(this.$el).width);
+    wrapper.style.width = this.width * this.count + 'px';
+
     // 第一张图在-width px处
     this.left = -this.width;
-    // dTransTime不需要被赋初始值 因为每次用的时候都会提前赋值 而且如果赋值的话上面设置left切第一张的时候会有动画
     this.startTimer();
+    // dTransTime不需要被赋初始值 因为每次用的时候都会提前赋值 而且如果赋值的话上面设置left切第一张的时候会有动画
   }
 }
 </script>
@@ -243,11 +226,6 @@ export default {
 .wrapper {
   display: flex;
   position: absolute;
-}
-
-.swiper img {
-  width: 100%;
-  height: 100%;
 }
 
 .indicator {
