@@ -1,24 +1,30 @@
 <template>
   <div id="home">
-    <top />
-    <scroll class="scroll" ref="scroll" @scroll="scroll" @pullingUp="pullingUp">
-      <h-swiper :swiper-items="swiperItems" />
-      <recommend :recommends="recommends" />
+    <top/>
+    <tab-control class="placeHolder"
+                 :titles="['流行','新款','精选']"
+                 :disabled="scrolling"
+                 v-show="showPlaceHolder"
+                 ref="tabControl1"
+                 @tabClick="tabClick"/>
+    <scroll class="scroll" ref="scroll" @scroll="scroll" @scrollEnd="scrollEnd" @pullingUp="pullingUp">
+      <swiper :width="320" :height="200" :swiper-items="swiperItems" :pTransTime="300"
+              @SwiperHasLoad="SwiperHasLoad"/>
+      <recommend :recommends="recommends"/>
       <tab-control class="tab-control"
-                   :style="tabControlStyle"
                    :titles="['流行','新款','精选']"
-                   ref="tabControl"
-                   @tabClick="tabClick" />
-      <good-list :goods="goods" :type="curType" />
+                   ref="tabControl2"
+                   @tabClick="tabClick"/>
+      <good-list :goods="goods" :type="curType"/>
     </scroll>
-    <back-top v-show="showBack" @click.native="backTop" />
+    <back-top v-show="showBack" @click.native="backTop"/>
   </div>
 </template>
 
 <script>
 import Top from "./children/Top";
 import Scroll from "components/common/scroll/Scroll";
-import HSwiper from "./children/HSwiper";
+import Swiper from "components/common/swiper/Swiper";
 import Recommend from "./children/Recommend";
 import TabControl from "components/content/TabControl";
 import GoodList from "components/content/goods/GoodList";
@@ -32,7 +38,7 @@ export default {
   components: {
     Top,
     Scroll,
-    HSwiper,
+    Swiper,
     Recommend,
     TabControl,
     GoodList,
@@ -716,29 +722,77 @@ export default {
         ],
       },
       curType: 'pop',
-      position: {},
-      tabControlStyle:{},
-      offsetTop:0,
-      count:0
+      position: {
+        pop: {},
+        new: {},
+        deli: {}
+      },
+      offsetTop: 0,
+      showPlaceHolder: false,
+      scrolling:false
     }
   },
-  computed:{
-    showBack(){
-      return this.position.y < -1000;
-    }
+  computed: {
+    showBack()
+    {
+      return this.position[this.curType].y < -1000;
+    },
   },
   methods: {
+    tabClick(index)
+    {
+      // 没有滚完不能切换
+      if (this.scrolling)return
+      switch (index)
+      {
+        case 0:
+          this.curType = 'pop';
+          break;
+        case 1:
+          this.curType = 'new';
+          break;
+        case 2:
+          this.curType = 'deli';
+          break;
+      }
+      this.showPlaceHolder ? this.$refs.tabControl2.currentIndex = index :
+          this.$refs.tabControl1.currentIndex = index;
+      // 要让他算完高度后再滑动 如果高度不足就滑动的话会触发下拉加载更多
+      this.$refs.scroll.scrollTo(this.position[this.curType],0);
+    },
+    SwiperHasLoad()
+    {
+      this.offsetTop = this.$refs.tabControl2.$el.offsetTop;
+    },
     scroll(position)
     {
-      this.position = position;
-      console.log(this.count++);
-      // 什么时候要吸顶?
-      this.tabControlStyle = -this.position.y >= this.offsetTop ? {
-        position:'relative',
-        top:-this.position.y - this.offsetTop +'px',
-        left:0,
-        right:0
-      }:{}
+      this.scrolling = true;
+      this.showPlaceHolder = -position.y >= this.offsetTop;
+      if (this.showPlaceHolder)
+      {
+        for (const positionKey in this.position)
+        {
+          if (positionKey === this.curType)
+          {
+            this.position[positionKey] = position;
+          } else
+          {
+            this.position[positionKey] = {
+              ...this.position[positionKey],
+              y:Math.min(-this.offsetTop,this.position[positionKey].y)
+            }
+          }
+        }
+      }else
+      {
+        for (const positionKey in this.position)
+        {
+          this.position[positionKey] = position;
+        }
+      }
+    },
+    scrollEnd(){
+      this.scrolling = false;
     },
     pullingUp()
     {
@@ -768,39 +822,39 @@ export default {
             });
       }
       this.$refs.scroll.finishPullUp();
-    },
-    tabClick(index)
+    }
+    ,
+    backTop()
     {
-      switch (index)
-      {
-        case 0:
-          this.curType = 'pop';
-          break;
-        case 1:
-          this.curType = 'new';
-          break;
-        case 2:
-          this.curType = 'deli';
-          break;
-      }
-    },
-    backTop(){
-      this.$refs.scroll.backTop();
-    },
+      this.$refs.scroll.scrollTo({x: 0,y: 0},500);
+    }
+    ,
   },
-  mounted() {
-    this.offsetTop = this.$refs.tabControl.$el.offsetTop;
+  mounted()
+  {
     let refresh = debounce(this.$refs.scroll.refresh);
-    this.$bus.$on('itemImgLoad',() => {
+    let count = 0;
+    this.$bus.$on('itemImgLoad',() =>
+    {
+      count++;
       refresh();
     })
-  }
+  },
+
 }
 </script>
 
 <style scoped>
 #home {
   height: 100vh;
+}
+
+.placeHolder {
+  position: fixed;
+  top: 44px;
+  z-index: 10;
+  left: 0;
+  right: 0;
 }
 
 .scroll {

@@ -1,17 +1,18 @@
 <template>
   <div class="swiper" :style="swiperStyle">
     <div class="wrapper"
+         ref="wrapper"
          :style="wrapperStyle"
          @touchstart="touchstart"
          @touchmove="touchmove"
          @touchend="touchend">
       <a v-for="item in dItems" :href="item.href" :style="swiperStyle">
-        <img :src="item.src">
+        <img :src="item.src" @load="imgHasLoad">
       </a>
     </div>
-    <div class="indicator" v-show="this.pItems.length > 1 && this.showIndi">
+    <div class="indicator" v-show="this.swiperItems.length > 1 && this.showIndi">
       <slot name="indicator">
-        <div class="indicator-icon" :class="iconClass(index)" v-for="(item,index) in pItems">
+        <div class="indicator-icon" :class="iconClass(index)" v-for="(item,index) in swiperItems">
         </div>
       </slot>
     </div>
@@ -20,12 +21,26 @@
 
 <script>
 let methods = {
+  imgHasLoad()
+  {
+    if (!this.isLoad)
+    {
+      this.isLoad = true;
+      this.$emit('SwiperHasLoad');
+    }
+  },
   touchstart(e)
   {
     if (this.scrolling)
     {
+      console.log('早了');
+      this.moving = false;
+      this.callback = () => {
+        this.touchstart(e);
+      }
       return;
     }
+    this.moving = true;
     this.preX = e.changedTouches[0].clientX;
     this.startLeft = this.left;
     // 这个不能省略 因为在touchmove的时候不能有动画
@@ -34,6 +49,7 @@ let methods = {
   },
   touchmove(e)
   {
+    if (!this.moving) return;
     // 为正表示手指向右 为负表示向左
     const mouseMove = e.changedTouches[0].clientX - this.preX;
     this.preX = e.changedTouches[0].clientX;
@@ -64,6 +80,8 @@ let methods = {
   },
   touchend()
   {
+    if (!this.moving) return;
+    this.callback = null;
     // 在move时可能移动了多张图片 而且要看的是最后一张图是否移过了ratio 通过取余拿到最后一张图移动了多少
     let distance = (this.left - this.startLeft) % this.width;
     // left越小表示手指越往左边
@@ -73,16 +91,17 @@ let methods = {
     // 注意这时候的index为上一张图的index 所以如果且就scroll(0) 不切就scroll(1)返回当前图
     if (Math.abs(distance) >= this.width * this.ratio)
     {
-      distance < 0 ? this.scrollTo(1):this.scrollTo(0);
-    } else if (distance != 0)
+      distance < 0 ? this.scrollTo(1) : this.scrollTo(0);
+    } else if (distance !== 0)
     {
-      distance < 0 ? this.scrollTo(0):this.scrollTo(1);
+      distance < 0 ? this.scrollTo(0) : this.scrollTo(1);
     }
     this.startTimer();
   },
   // 从当前left带动画的移动到index+direction所在left
   scrollTo(direction)
   {
+    console.log('scrollTo ----',direction);
     this.curIndex = this.index;
     // 最终下标
     this.index += direction;
@@ -111,11 +130,13 @@ let methods = {
       }
       // 动画结束后更新index
       this.curIndex = this.index;
+      this.callback && this.callback();
     },this.dTransTime)
   },
   // 删除计时器
   stopTimer()
   {
+    console.log('停了');
     clearInterval(this.timer);
   },
   startTimer()
@@ -123,11 +144,12 @@ let methods = {
     this.timer = setInterval(() =>
     {
       this.scrollTo(1)
-    },3000)
+    },this.interval)
   },
   // 设置当前导航的class是否添加
-  iconClass(index){
-    return {active:this.curIndex-1 === index}
+  iconClass(index)
+  {
+    return {active: this.curIndex - 1 === index}
   },
 };
 export default {
@@ -135,7 +157,7 @@ export default {
   name: "Swiper",
   props: {
     // 传入的对象数组 每个对象都有href和src属性
-    pItems: {
+    swiperItems: {
       type: Array,
       default()
       {
@@ -145,17 +167,17 @@ export default {
     // 设置轮播图的宽高
     width: Number,
     height: Number,
-    interval:{   // 轮播时间
-      type:Number,
-      default:3000
+    interval: {   // 轮播时间
+      type: Number,
+      default: 3000
     },
-    pTransTime:{ // 切图时间
-      type:Number,
-      default:300
+    pTransTime: { // 切图时间
+      type: Number,
+      default: 300
     },
-    showIndi:{ // 是否显示导航按钮
-      type:Boolean,
-      default:true
+    showIndi: { // 是否显示导航按钮
+      type: Boolean,
+      default: true
     }
   },
   data()
@@ -172,8 +194,11 @@ export default {
       // 滚动多少切到下一张
       ratio: 0.25,
       // 当前轮播的下标(不包括拖动) 用于导航按钮
-      curIndex:1,
-      dTransTime:0
+      curIndex: 1,
+      dTransTime: 0,
+      isLoad: false,
+      moving:false,
+      callback:null
     }
   },
   computed: {
@@ -198,12 +223,12 @@ export default {
   },
   mounted()
   {
-    let temp = this.pItems;
+    let temp = this.swiperItems;
     // 设置dItems
     this.dItems = [temp[temp.length - 1],...temp,temp[0]];
-    this.dTransTime = this.pTransTime;
     // 第一张图在-width px处
     this.left = -this.width;
+    // dTransTime不需要被赋初始值 因为每次用的时候都会提前赋值 而且如果赋值的话上面设置left切第一张的时候会有动画
     this.startTimer();
   }
 }
@@ -224,23 +249,26 @@ export default {
   width: 100%;
   height: 100%;
 }
-.indicator{
+
+.indicator {
   position: absolute;
-  z-index:20;
+  z-index: 20;
   display: flex;
   left: 5%;
   bottom: 5%;
 }
-.indicator-icon{
+
+.indicator-icon {
   width: 15px;
   height: 15px;
   border-radius: 50%;
-  background-color: rgba(255,255,255,.3);
+  background-color: rgba(255, 255, 255, .3);
   border: 2px solid transparent;
   background-clip: content-box;
 }
-.indicator-icon.active{
-  background-color: rgba(255,255,255,.8);
-  border: 2px solid rgba(255,255,255,.3);
+
+.indicator-icon.active {
+  background-color: rgba(255, 255, 255, .8);
+  border: 2px solid rgba(255, 255, 255, .3);
 }
 </style>

@@ -5,11 +5,11 @@ Vue.use(VueX);
 
 let store = new VueX.Store({
 	state:{
-		hasLoad:0
+		homeTypeIndex:0,
 	},
 	mutations:{
-		itemImgLoad(state){
-			state.hasLoad++;
+		homeTabClick(state,index){
+			state.homeTypeIndex = index;
 		}
 	},
 });

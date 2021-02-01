@@ -20,23 +20,27 @@ export default {
   mounted()
   {
     this.scroll = new BScroll(this.$refs.wrapper,{
-      probeType: 2,
+      probeType: 3,
       click: true,
       pullUpLoad: true
     })
+    this.scroll.scrollerHeight = 0;
     this.scroll.on('scroll',position =>
     {
       this.$emit('scroll',position);
     });
+    this.scroll.on('scrollEnd',() => {
+      this.$emit('scrollEnd');
+    })
     this.scroll.on('pullingUp',() =>
     {
       this.$emit('pullingUp');
-    })
+    });
   },
   methods: {
-    backTop()
+    scrollTo(position,delay)
     {
-      this.scroll.scrollTo(0,0,500);
+      this.scroll.scrollTo(position.x || 0,position.y || 0,delay);
     },
     finishPullUp()
     {
@@ -44,8 +48,11 @@ export default {
     },
     refresh()
     {
-      console.log('-----');
+      console.log('----');
       this.scroll.refresh();
+    },
+    setScrollerHeight(){
+
     }
   }
 }
