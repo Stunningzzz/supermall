@@ -24,14 +24,13 @@ export default {
       click: true,
       pullUpLoad: true
     })
-    this.scroll.scrollerHeight = 0;
     this.scroll.on('scroll',position =>
     {
       this.$emit('scroll',position);
     });
     this.scroll.on('scrollEnd',() => {
       this.$emit('scrollEnd');
-    })
+    });
     this.scroll.on('pullingUp',() =>
     {
       this.$emit('pullingUp');
@@ -51,9 +50,7 @@ export default {
       console.log('----');
       this.scroll.refresh();
     },
-    setScrollerHeight(){
 
-    }
   }
 }
 </script>

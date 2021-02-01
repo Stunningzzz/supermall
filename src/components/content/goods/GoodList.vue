@@ -1,29 +1,41 @@
 <template>
   <div class="good-list">
-    <list-item v-for="item in goods[type]" :item="item">
+    <list-item v-for="item in good" :item="item">
     </list-item>
   </div>
 </template>
 
 <script>
 import ListItem from "./ListItem";
+import {goods} from "../../../views/home/data";
 
 export default {
   name: "GoodList",
+  data(){
+    return {
+      counter:0
+    }
+  },
   props: {
-    goods: {
-      type: Object,
+    good: {
+      type: Array,
       default()
       {
-        return {}
+        return []
       }
     },
-    type: String
   },
   components: {
     ListItem
   },
-
+  watch:{
+    counter(value){
+      if(value === this.good.length)
+      {
+        this.$emit('ListLoad');
+      }
+    }
+  }
 }
 </script>
 
