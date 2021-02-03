@@ -25,6 +25,7 @@
 </template>
 
 <script>
+console.log('aaa');
 import HomeTop from "./children/HomeTop";
 import Scroll from "components/common/scroll/Scroll";
 import HomeSwiper from "./children/HomeSwiper";
