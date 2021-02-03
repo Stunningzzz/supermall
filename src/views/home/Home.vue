@@ -32,7 +32,6 @@ import HomeReco from "./children/HomeReco";
 import TabControl from "components/content/TabControl";
 import GoodList from "components/content/goods/GoodList";
 import BackTop from "components/content/backtop/BackTop";
-
 import {debounce} from "common/utils";
 
 import {swiperItems,recommends,goods,pushItems} from "./data";
