@@ -1,6 +1,6 @@
 <template>
   <div class="good-list">
-    <list-item v-for="item in good" :item="item">
+    <list-item v-for="item in goods[type]" :item="item">
     </list-item>
   </div>
 </template>
@@ -17,25 +17,20 @@ export default {
     }
   },
   props: {
-    good: {
-      type: Array,
+    goods: {
+      type: Object,
       default()
       {
-        return []
+        return {}
       }
     },
+    type:{
+      type:String,
+    }
   },
   components: {
     ListItem
   },
-  watch:{
-    counter(value){
-      if(value === this.good.length)
-      {
-        this.$emit('ListLoad');
-      }
-    }
-  }
 }
 </script>
 

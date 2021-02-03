@@ -25,7 +25,7 @@ export default {
   },
   methods:{
     itemImgLoad(){
-      this.$parent.counter++;
+      this.$bus.$emit('itemImgLoad')
     }
   }
 }
