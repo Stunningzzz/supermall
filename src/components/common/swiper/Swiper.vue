@@ -237,8 +237,8 @@ export default {
 }
 
 .indicator-icon {
-  width: 15px;
-  height: 15px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background-color: rgba(255, 255, 255, .3);
   border: 2px solid transparent;

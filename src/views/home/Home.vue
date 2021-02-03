@@ -16,7 +16,8 @@
                    :titles="['流行','新款','精选']" :disabled="scrolling"
                    ref="tabControl2"
                    @tabClick="tabClick"/>
-      <good-list :goods="goods" :type="curType"/>
+      <good-list :goods="goods" :type="curType"
+                 @ListLoad="ListLoad" />
     </scroll>
     <back-top v-show="showBack"
               @click.native="backTop"/>
@@ -35,6 +36,7 @@ import BackTop from "components/content/backtop/BackTop";
 import {debounce} from "common/utils";
 
 import {swiperItems,recommends,goods,pushItems} from "./data";
+
 
 export default {
   name: "Home",
@@ -124,6 +126,9 @@ export default {
     scrollEnd()
     {
       this.scrolling = false;
+    },
+    ListLoad(){
+      this.$refs.scroll.refresh();
     },
     pullingUp()
     {
