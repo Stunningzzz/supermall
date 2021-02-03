@@ -8,7 +8,7 @@
                  @tabClick="tabClick"/>
     <scroll class="scroll"
             ref="scroll"
-            @scroll="scroll" @scrollEnd="scrollEnd" @pullingUp="pullingUp">
+            @scroll="scroll" @scrollEnd="scrollEnd" @pullingUp="pullingUp" @refresh="refresh">
       <home-swiper :swiper-items="swiperItems"
                    @SwiperHasLoad="SwiperHasLoad"/>
       <home-reco :recommends="recommends"/>
@@ -25,7 +25,6 @@
 </template>
 
 <script>
-console.log('aaa');
 import HomeTop from "./children/HomeTop";
 import Scroll from "components/common/scroll/Scroll";
 import HomeSwiper from "./children/HomeSwiper";
@@ -72,6 +71,7 @@ export default {
     },
   },
   methods: {
+
     tabClick(index)
     {
       // 没有滚完不能切换
@@ -90,8 +90,13 @@ export default {
       }
       this.showPlaceHolder ? this.$refs.tabControl2.currentIndex = index :
           this.$refs.tabControl1.currentIndex = index;
-      // 要让他算完高度后再滑动 如果高度不足就滑动的话会触发下拉加载更多
-      this.$refs.scroll.scrollTo(this.position[this.curType],0);
+      this.$refs.scroll.onceRefresh();
+      this.$refs.scroll.offScroll();
+    },
+    refresh(){
+      let scroll = this.$refs.scroll;
+      scroll.scrollTo(this.position[this.curType],0);
+      scroll.onScroll();
     },
     SwiperHasLoad()
     {
@@ -144,7 +149,6 @@ export default {
     {
       this.$refs.scroll.scrollTo({x: 0,y: 0},500);
     },
-
   },
   mounted()
   {
