@@ -1,11 +1,11 @@
 <template>
   <div id="home">
     <home-top/>
-<!--    <tab-control class="placeHolder"-->
-<!--                 v-show="showPlaceHolder"-->
-<!--                 :titles="['流行','新款','精选']" :disabled="scrolling"-->
-<!--                 ref="tabControl1"-->
-<!--                 @tabClick="tabClick"/>-->
+    <tab-control class="placeHolder"
+                 v-show="showPlaceHolder"
+                 :titles="['流行','新款','精选']" :disabled="scrolling"
+                 ref="tabControl1"
+                 @tabClick="tabClick"/>
     <scroll class="scroll"
             ref="scroll"
             @scroll="scroll" @scrollEnd="scrollEnd" @pullingUp="pullingUp" @refresh="refresh">
@@ -20,8 +20,8 @@
       <good-list  :goods="goods" :type="curType"
                  @ListLoad="ListLoad" />
     </scroll>
-<!--    <back-top v-show="showBack"-->
-<!--              @click.native="backTop"/>-->
+    <back-top v-show="showBack"
+              @click.native="backTop"/>
   </div>
 </template>
 
@@ -55,12 +55,20 @@ export default {
   data()
   {
     return {
-      banner:{},
-      recommend:{},
-      keywords:[],
-      goods:{},
+      banner: {},
+      recommend: {},
+      keywords: [],
+      goods: {
+        pop:{list:[],page:1},
+        new:{list:[],page:1},
+        sell:{list:[],page:1},
+      },
       curType: 'pop',
-      position: {},
+      position: {
+        pop:{},
+        new:{},
+        sell:{}
+      },
       offsetTop: 0,
       showPlaceHolder: false,
       scrolling: false
@@ -94,13 +102,15 @@ export default {
       this.$refs.scroll.onceRefresh();
       this.$refs.scroll.offScroll();
     },
-    refresh(){
+    refresh()
+    {
       let scroll = this.$refs.scroll;
       scroll.scrollTo(this.position[this.curType],0);
       scroll.onScroll();
     },
     SwiperHasLoad()
     {
+      console.log('SwiperHasLoad');
       this.offsetTop = this.$refs.tabControl2.$el.offsetTop;
     },
     scroll(position)
@@ -118,11 +128,11 @@ export default {
           {
             this.position[positionKey] = {
               ...this.position[positionKey],
-              y:Math.min(-this.offsetTop,this.position[positionKey].y)
+              y: Math.min(-this.offsetTop,this.position[positionKey].y)
             }
           }
         }
-      }else
+      } else
       {
         for (const positionKey in this.position)
         {
@@ -134,12 +144,13 @@ export default {
     {
       this.scrolling = false;
     },
-    ListLoad(){
+    ListLoad()
+    {
       this.$refs.scroll.refresh();
     },
     pullingUp()
     {
-      console.log('上拉加载更多');
+      console.log('上拉加载更多')
       this.getGoodData(this.curType)
       this.$refs.scroll.finishPullUp();
     },
@@ -152,19 +163,15 @@ export default {
     {
       GoodData(type,this.goods[type].page).then(data => {
         this.goods[type].list.push(...data.list);
-        this.goods[type].page++;
       })
-    }
+    },
   },
   created()
   {
-    MultiData().then(data => {
+    MultiData().then(data =>
+    {
       this.banner = data.banner;
       this.recommend = data.recommend;
-    });
-    ['pop','new','sell'].forEach( v => {
-      this.goods[v] = {page:1,list:[]};
-      this.position[v] = {};
     });
     for (let type in this.goods)
     {
@@ -173,7 +180,7 @@ export default {
   },
   mounted()
   {
-    let refresh = debounce(this.$refs.scroll.refresh);
+    let refresh = debounce(this.$refs.scroll.refresh,50);
     this.$bus.$on('itemImgLoad',() =>
     {
       refresh();

@@ -25,11 +25,6 @@ export default {
   components: {
     ListItem
   },
-  watch:{
-    goods(){
-      console.log(this.goods);
-    }
-  }
 }
 </script>
 

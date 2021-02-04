@@ -3,7 +3,7 @@
     <a v-for="item in banner.list"
        class="slider-item"
        :href="item.link">
-      <img :src="item.image" @load="imgHasLoad"/>
+      <img :src="item.image" @load="SwiperHasLoad"/>
     </a>
   </swiper>
 </template>
@@ -33,11 +33,11 @@ export default {
   watch:{
   },
   methods: {
-    imgHasLoad(){
+    SwiperHasLoad(){
       if (!this.isLoad)
       {
         this.isLoad = true;
-        this.$refs.swiper.init();
+        this.$emit('SwiperHasLoad');
       }
     }
   }
