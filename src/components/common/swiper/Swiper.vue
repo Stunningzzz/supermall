@@ -22,7 +22,8 @@ let methods = {
     {
       console.log('早了');
       this.moving = false;
-      this.callback = () => {
+      this.callback = () =>
+      {
         this.touchstart(e);
       }
       return;
@@ -36,7 +37,10 @@ let methods = {
   },
   touchmove(e)
   {
-    if (!this.moving) return;
+    if ( !this.moving)
+    {
+      return;
+    }
     // 为正表示手指向右 为负表示向左
     const mouseMove = e.changedTouches[0].clientX - this.preX;
     this.preX = e.changedTouches[0].clientX;
@@ -67,7 +71,10 @@ let methods = {
   },
   touchend()
   {
-    if (!this.moving) return;
+    if ( !this.moving)
+    {
+      return;
+    }
     this.callback = null;
     // 在move时可能移动了多张图片 而且要看的是最后一张图是否移过了ratio 通过取余拿到最后一张图移动了多少
     let distance = (this.left - this.startLeft) % this.width;
@@ -135,8 +142,27 @@ let methods = {
   // 设置当前导航的class是否添加
   iconClass(index)
   {
-    return {active: this.curIndex  === index}
+    return {active: this.curIndex === index}
   },
+  init()
+  {
+    // 插入前后两张额外的图片
+    let wrapper = this.$refs.wrapper;
+    let firstChild = wrapper.firstElementChild.cloneNode(true);
+    let lastChild = wrapper.lastElementChild.cloneNode(true);
+    wrapper.appendChild(firstChild);
+    wrapper.insertBefore(lastChild,wrapper.firstElementChild);
+
+    this.count = wrapper.childElementCount;
+    // 计算Swiper的宽度
+    this.width = parseInt(getComputedStyle(this.$el).width);
+    wrapper.style.width = this.width * this.count + 'px';
+
+    // 第一张图在-width px处
+    this.left = -this.width;
+    this.startTimer();
+    // dTransTime不需要被赋初始值 因为每次用的时候都会提前赋值 而且如果赋值的话上面设置left切第一张的时候会有动画
+  }
 };
 export default {
   methods,
@@ -158,18 +184,18 @@ export default {
       default: true
     },
     // 滚动多少切到下一张
-    ratio:{
-      type:Number,
-      default:0.25
+    ratio: {
+      type: Number,
+      default: 0.25
     }
   },
   data()
   {
     return {
       // 整个swiper的宽度同时也是每一张图片的宽度
-      width:0,
+      width: 0,
       // 用户看到的图片数量
-      count:4,
+      count: 4,
       // 当前轮播或者拖动到的下标
       index: 1,
       // list的left
@@ -180,9 +206,9 @@ export default {
       curIndex: 1,
       dTransTime: 0,
       // 是否可以滑动 用于标识touchstart是否有效
-      moving:false,
+      moving: false,
       // scrollTo切换完成后的回调 用于保存scrolling状态下的touchstart
-      callback:null
+      callback: null
     }
   },
   computed: {
@@ -195,25 +221,7 @@ export default {
       }
     },
   },
-  mounted()
-  {
-    // 插入前后两张额外的图片
-    let wrapper = this.$refs.wrapper;
-    let firstChild = wrapper.firstElementChild.cloneNode(true);
-    let lastChild = wrapper.lastElementChild.cloneNode(true);
-    wrapper.appendChild(firstChild);
-    wrapper.insertBefore(lastChild,wrapper.firstElementChild);
 
-    this.count = wrapper.childElementCount;
-    // 计算Swiper的宽度
-    this.width = parseInt(getComputedStyle(this.$el).width);
-    wrapper.style.width = this.width * this.count + 'px';
-
-    // 第一张图在-width px处
-    this.left = -this.width;
-    this.startTimer();
-    // dTransTime不需要被赋初始值 因为每次用的时候都会提前赋值 而且如果赋值的话上面设置left切第一张的时候会有动画
-  }
 }
 </script>
 

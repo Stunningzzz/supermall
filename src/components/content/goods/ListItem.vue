@@ -1,13 +1,13 @@
 <template>
   <div class="list-item">
     <a class="list-img">
-      <img :src="item.src" @load="itemImgLoad">
+      <img :src="item.show.img" @load="itemImgLoad">
     </a>
     <div class="item-info">
       <p class="title">{{ item.title }}</p>
       <span class="price">{{ item.price }}</span>
       <span class="iconfont icon-shoucang"></span>
-      <span class="coll">{{ item.coll }}</span>
+      <span class="coll">{{ item.sale }}</span>
     </div>
   </div>
 </template>
@@ -25,9 +25,10 @@ export default {
   },
   methods:{
     itemImgLoad(){
+      console.log('aaa');
       this.$bus.$emit('itemImgLoad')
     }
-  }
+  },
 }
 </script>
 

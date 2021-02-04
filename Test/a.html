@@ -5,29 +5,32 @@
   <title>Title</title>
   <link rel="stylesheet" href="./iconfont.css">
   <style>
-    #outer{
-      width: 300px;
-      height: 300px;
-      background-color: #bfa;
-      overflow: auto
+    .outer{
+      width: 60%;
+      border: 10px solid red;
+      position: relative;
+      overflow: hidden;
     }
-    #inner{
+    .inner{
       width: 150px;
+      height: 150px;
       background-color:skyblue;
+    }
+    .inner1{
+      width: 150px;
+      height: 150px;
+      float: left;
+      background-color: #bfa;
     }
   </style>
 </head>
 <body>
-  <div id="outer">
-    <div id="inner">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque cupiditate earum hic illum laboriosam magni nisi odio totam vero. Accusamus ducimus inventore quidem! Architecto earum enim facilis nesciunt officiis omnis?
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque cupiditate earum hic illum laboriosam magni nisi odio totam vero. Accusamus ducimus inventore quidem! Architecto earum enim facilis nesciunt officiis omnis?
-    </div>
+  <div class="outer">
+    <div class="inner"></div>
+    <div class="inner1"></div>
   </div>
 </body>
 <script>
-	let inner = document.querySelector('#inner');
-	document.cloneNode()
-	console.log(inner.hasChildNodes())
+
 </script>
 </html>

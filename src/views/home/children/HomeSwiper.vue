@@ -1,9 +1,9 @@
 <template>
-  <swiper class="home-swiper">
-    <a v-for="item in swiperItems"
+  <swiper class="home-swiper" ref="swiper">
+    <a v-for="item in banner.list"
        class="slider-item"
-       :href="item.href">
-      <img :src="item.src" @load="SwiperHasLoad"/>
+       :href="item.link">
+      <img :src="item.image" @load="imgHasLoad"/>
     </a>
   </swiper>
 </template>
@@ -14,13 +14,13 @@ import Swiper from "components/common/swiper/Swiper";
 export default {
   name: "HomeSwiper",
   props: {
-    swiperItems: {
-      type: Array,
+    banner: {
+      type: Object,
       default()
       {
-        return []
+        return {}
       }
-    }
+    },
   },
   data(){
     return {
@@ -30,13 +30,14 @@ export default {
   components: {
     Swiper,
   },
+  watch:{
+  },
   methods: {
-    SwiperHasLoad()
-    {
+    imgHasLoad(){
       if (!this.isLoad)
       {
         this.isLoad = true;
-        this.$emit('SwiperHasLoad');
+        this.$refs.swiper.init();
       }
     }
   }
@@ -46,13 +47,13 @@ export default {
 <style scoped>
 .home-swiper {
   width: 320px;
-  height: 200px;
+  height: 180px;
 }
 
 .slider-item {
   width: 320px;
   /* 父元素是wrapper(display:flex;position:absolute)没有高度 所以这里的高度必须设置*/
-  height: 200px;
+  height: 180px;
 }
 
 .slider-item img {

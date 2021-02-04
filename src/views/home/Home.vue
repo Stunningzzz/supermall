@@ -1,26 +1,27 @@
 <template>
   <div id="home">
     <home-top/>
-    <tab-control class="placeHolder"
-                 v-show="showPlaceHolder"
-                 :titles="['流行','新款','精选']" :disabled="scrolling"
-                 ref="tabControl1"
-                 @tabClick="tabClick"/>
+<!--    <tab-control class="placeHolder"-->
+<!--                 v-show="showPlaceHolder"-->
+<!--                 :titles="['流行','新款','精选']" :disabled="scrolling"-->
+<!--                 ref="tabControl1"-->
+<!--                 @tabClick="tabClick"/>-->
     <scroll class="scroll"
             ref="scroll"
             @scroll="scroll" @scrollEnd="scrollEnd" @pullingUp="pullingUp" @refresh="refresh">
-      <home-swiper :swiper-items="swiperItems"
+      <home-swiper :banner="banner"
                    @SwiperHasLoad="SwiperHasLoad"/>
-      <home-reco :recommends="recommends"/>
+      <home-reco :recommends="recommend"/>
+      <home-weekly />
       <tab-control class="tab-control"
                    :titles="['流行','新款','精选']" :disabled="scrolling"
                    ref="tabControl2"
                    @tabClick="tabClick"/>
-      <good-list :goods="goods" :type="curType"
+      <good-list  :goods="goods" :type="curType"
                  @ListLoad="ListLoad" />
     </scroll>
-    <back-top v-show="showBack"
-              @click.native="backTop"/>
+<!--    <back-top v-show="showBack"-->
+<!--              @click.native="backTop"/>-->
   </div>
 </template>
 
@@ -29,17 +30,20 @@ import HomeTop from "./children/HomeTop";
 import Scroll from "components/common/scroll/Scroll";
 import HomeSwiper from "./children/HomeSwiper";
 import HomeReco from "./children/HomeReco";
+import HomeWeekly from "./children/HomeWeekly";
 import TabControl from "components/content/TabControl";
 import GoodList from "components/content/goods/GoodList";
 import BackTop from "components/content/backtop/BackTop";
 import {debounce} from "common/utils";
 
-import {swiperItems,recommends,goods,pushItems} from "./data";
+import {MultiData,GoodData} from "network/home";
+import {goods} from "./data";
 
 
 export default {
   name: "Home",
   components: {
+    HomeWeekly,
     HomeTop,
     Scroll,
     HomeSwiper,
@@ -51,13 +55,12 @@ export default {
   data()
   {
     return {
-      swiperItems,recommends,goods,
+      banner:{},
+      recommend:{},
+      keywords:[],
+      goods:{},
       curType: 'pop',
-      position: {
-        pop: {},
-        new: {},
-        deli: {}
-      },
+      position: {},
       offsetTop: 0,
       showPlaceHolder: false,
       scrolling: false
@@ -70,7 +73,6 @@ export default {
     },
   },
   methods: {
-
     tabClick(index)
     {
       // 没有滚完不能切换
@@ -84,7 +86,7 @@ export default {
           this.curType = 'new';
           break;
         case 2:
-          this.curType = 'deli';
+          this.curType = 'sell';
           break;
       }
       this.showPlaceHolder ? this.$refs.tabControl2.currentIndex = index :
@@ -138,16 +140,36 @@ export default {
     pullingUp()
     {
       console.log('上拉加载更多');
-      for (let i = 0; i < 10; i++)
-      {
-        this.goods[this.curType].push(...pushItems);
-      }
+      this.getGoodData(this.curType)
       this.$refs.scroll.finishPullUp();
     },
     backTop()
     {
       this.$refs.scroll.scrollTo({x: 0,y: 0},500);
     },
+    // 请求数据
+    getGoodData(type)
+    {
+      GoodData(type,this.goods[type].page).then(data => {
+        this.goods[type].list.push(...data.list);
+        this.goods[type].page++;
+      })
+    }
+  },
+  created()
+  {
+    MultiData().then(data => {
+      this.banner = data.banner;
+      this.recommend = data.recommend;
+    });
+    ['pop','new','sell'].forEach( v => {
+      this.goods[v] = {page:1,list:[]};
+      this.position[v] = {};
+    });
+    for (let type in this.goods)
+    {
+      this.getGoodData(type);
+    }
   },
   mounted()
   {

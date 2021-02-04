@@ -1,21 +1,15 @@
 <template>
   <div class="good-list">
-    <list-item v-for="item in goods[type]" :item="item">
+    <list-item v-for="item in goods[type].list" :item="item">
     </list-item>
   </div>
 </template>
 
 <script>
 import ListItem from "./ListItem";
-import {goods} from "../../../views/home/data";
 
 export default {
   name: "GoodList",
-  data(){
-    return {
-      counter:0
-    }
-  },
   props: {
     goods: {
       type: Object,
@@ -31,6 +25,11 @@ export default {
   components: {
     ListItem
   },
+  watch:{
+    goods(){
+      console.log(this.goods);
+    }
+  }
 }
 </script>
 
