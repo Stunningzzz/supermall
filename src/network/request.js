@@ -8,7 +8,7 @@ export function request(config)
 		timeout:5000
 	});
 	instance.interceptors.response.use(response => {
-		return response.data.data;
+		return response.data;
 	},error => {
 		throw new Error('网络请求错误');
 	})

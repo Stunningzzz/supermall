@@ -10,6 +10,9 @@ export function MultiData()
 export function GoodData(type,page)
 {
 	return request({
-		url:`home/data?type=${type}&page=${page}`
+		url:`home/data`,
+		params:{
+			type,page
+		}
 	})
 }

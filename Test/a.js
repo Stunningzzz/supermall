@@ -1,8 +1,8 @@
 
 
-function fn()
-{
-	console.log('aaa');
+let str = 'sum';
+function [str](num1,num2) {
+  return num1+num2;
 }
-fn();
-console.log('bbb');
+
+

@@ -37,7 +37,8 @@ export default {
       if (!this.isLoad)
       {
         this.isLoad = true;
-        this.$emit('SwiperHasLoad');
+        this.$refs.swiper.init();
+        this.$emit('SwiperHasLoad')
       }
     }
   }

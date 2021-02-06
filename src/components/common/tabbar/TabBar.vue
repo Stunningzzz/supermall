@@ -12,7 +12,7 @@ name: "TabBar"
 
 <style scoped>
 #TabBar{
-  height: 59px;
+  height: 49px;
   display: flex;
   background-color: #F6F6F6;
   text-align: center;

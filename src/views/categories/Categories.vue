@@ -1,224 +1,38 @@
 <template>
-  <div class="wrapper">
-    <ul class="content">
-      <li>内容1</li>
-      <li>内容2</li>
-      <li>内容3</li>
-      <li>内容4</li>
-      <li>内容5</li>
-      <li>内容6</li>
-      <li>内容7</li>
-      <li>内容8</li>
-      <li>内容9</li>
-      <li>内容10</li>
-      <li>内容11</li>
-      <li>内容12</li>
-      <li>内容13</li>
-      <li>内容14</li>
-      <li>内容15</li>
-      <li>内容16</li>
-      <li>内容17</li>
-      <li>内容18</li>
-      <li>内容19</li>
-      <li>内容20</li>
-      <li>内容21</li>
-      <li>内容22</li>
-      <li>内容23</li>
-      <li>内容24</li>
-      <li>内容25</li>
-      <li>内容26</li>
-      <li>内容27</li>
-      <li>内容28</li>
-      <li>内容29</li>
-      <li>内容30</li>
-      <li>内容31</li>
-      <li>内容32</li>
-      <li>内容33</li>
-      <li>内容34</li>
-      <li>内容35</li>
-      <li>内容36</li>
-      <li>内容37</li>
-      <li>内容38</li>
-      <li>内容39</li>
-      <li>内容40</li>
-      <li>内容41</li>
-      <li>内容42</li>
-      <li>内容43</li>
-      <li>内容44</li>
-      <li>内容45</li>
-      <li>内容46</li>
-      <li>内容47</li>
-      <li>内容48</li>
-      <li>内容49</li>
-      <li>内容50</li>
-      <li>内容51</li>
-      <li>内容52</li>
-      <li>内容53</li>
-      <li>内容54</li>
-      <li>内容55</li>
-      <li>内容56</li>
-      <li>内容57</li>
-      <li>内容58</li>
-      <li>内容59</li>
-      <li>内容60</li>
-      <li>内容61</li>
-      <li>内容62</li>
-      <li>内容63</li>
-      <li>内容64</li>
-      <li>内容65</li>
-      <li>内容66</li>
-      <li>内容67</li>
-      <li>内容68</li>
-      <li>内容69</li>
-      <li>内容70</li>
-      <li>内容71</li>
-      <li>内容72</li>
-      <li>内容73</li>
-      <li>内容74</li>
-      <li>内容75</li>
-      <li>内容76</li>
-      <li>内容77</li>
-      <li>内容78</li>
-      <li>内容79</li>
-      <li>内容80</li>
-      <li>内容81</li>
-      <li>内容82</li>
-      <li>内容83</li>
-      <li>内容84</li>
-      <li>内容85</li>
-      <li>内容86</li>
-      <li>内容87</li>
-      <li>内容88</li>
-      <li>内容89</li>
-      <li>内容90</li>
-      <li>内容91</li>
-      <li>内容92</li>
-      <li>内容93</li>
-      <li>内容94</li>
-      <li>内容95</li>
-      <li>内容96</li>
-      <li>内容97</li>
-      <li>内容98</li>
-      <li>内容99</li>
-      <li>内容100</li>
-      <li>内容101</li>
-      <li>内容102</li>
-      <li>内容103</li>
-      <li>内容104</li>
-      <li>内容105</li>
-      <li>内容106</li>
-      <li>内容107</li>
-      <li>内容108</li>
-      <li>内容109</li>
-      <li>内容110</li>
-      <li>内容111</li>
-      <li>内容112</li>
-      <li>内容113</li>
-      <li>内容114</li>
-      <li>内容115</li>
-      <li>内容116</li>
-      <li>内容117</li>
-      <li>内容118</li>
-      <li>内容119</li>
-      <li>内容120</li>
-      <li>内容121</li>
-      <li>内容122</li>
-      <li>内容123</li>
-      <li>内容124</li>
-      <li>内容125</li>
-      <li>内容126</li>
-      <li>内容127</li>
-      <li>内容128</li>
-      <li>内容129</li>
-      <li>内容130</li>
-      <li>内容131</li>
-      <li>内容132</li>
-      <li>内容133</li>
-      <li>内容134</li>
-      <li>内容135</li>
-      <li>内容136</li>
-      <li>内容137</li>
-      <li>内容138</li>
-      <li>内容139</li>
-      <li>内容140</li>
-      <li>内容141</li>
-      <li>内容142</li>
-      <li>内容143</li>
-      <li>内容144</li>
-      <li>内容145</li>
-      <li>内容146</li>
-      <li>内容147</li>
-      <li>内容148</li>
-      <li>内容149</li>
-      <li>内容150</li>
-      <li>内容151</li>
-      <li>内容152</li>
-      <li>内容153</li>
-      <li>内容154</li>
-      <li>内容155</li>
-      <li>内容156</li>
-      <li>内容157</li>
-      <li>内容158</li>
-      <li>内容159</li>
-      <li>内容160</li>
-      <li>内容161</li>
-      <li>内容162</li>
-      <li>内容163</li>
-      <li>内容164</li>
-      <li>内容165</li>
-      <li>内容166</li>
-      <li>内容167</li>
-      <li>内容168</li>
-      <li>内容169</li>
-      <li>内容170</li>
-      <li>内容171</li>
-      <li>内容172</li>
-      <li>内容173</li>
-      <li>内容174</li>
-      <li>内容175</li>
-      <li>内容176</li>
-      <li>内容177</li>
-      <li>内容178</li>
-      <li>内容179</li>
-      <li>内容180</li>
-      <li>内容181</li>
-      <li>内容182</li>
-      <li>内容183</li>
-      <li>内容184</li>
-      <li>内容185</li>
-      <li>内容186</li>
-      <li>内容187</li>
-      <li>内容188</li>
-      <li>内容189</li>
-      <li>内容190</li>
-      <li>内容191</li>
-      <li>内容192</li>
-      <li>内容193</li>
-      <li>内容194</li>
-      <li>内容195</li>
-      <li>内容196</li>
-      <li>内容197</li>
-      <li>内容198</li>
-      <li>内容199</li>
-      <li>内容200</li>
-    </ul>
-  </div>
+  <cate-top :item="{name:{firstName:'luzhihao'}}"></cate-top>
 </template>
 
 <script>
-
+import CateTop from "./CateTop";
 
 export default {
   name: "Categories",
-  mounted() {
+  components: {
+    CateTop
+  },
+  computed:{
+    str(){
+      return 123
     }
-}
+  },
+  data() {
+    return {
+      num:1
+    };
+  },
+  filters:{
+    ten(value){
+      return value*10
+    }
+  }
+};
 </script>
 
 <style scoped>
-  .wrapper{
-    height: 200px;
-    background-color: #bfa;
-    overflow: hidden;
-  }
+.red {
+  color: red;
+}
+.fs {
+  font-size: 50px;
+}
 </style>

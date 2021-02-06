@@ -1,7 +1,6 @@
 <template>
   <div class="good-list">
-    <list-item v-for="item in goods[type].list" :item="item">
-    </list-item>
+    <list-item v-for="item in goods" :item="item" :key="item.img"> </list-item>
   </div>
 </template>
 
@@ -12,26 +11,23 @@ export default {
   name: "GoodList",
   props: {
     goods: {
-      type: Object,
-      default()
-      {
-        return {}
-      }
+      type: Array,
+      default() {
+        return [];
+      },
     },
-    type:{
-      type:String,
-    }
+    type: {
+      type: String,
+    },
   },
   components: {
-    ListItem
+    ListItem,
   },
-}
+};
 </script>
 
 <style scoped>
-.wrapper {
-  overflow: hidden;
-}
+
 
 .good-list {
   display: flex;

@@ -17,8 +17,7 @@
                    :titles="['流行','新款','精选']" :disabled="scrolling"
                    ref="tabControl2"
                    @tabClick="tabClick"/>
-      <good-list  :goods="goods" :type="curType"
-                 @ListLoad="ListLoad" />
+      <good-list  :goods="curGoods" :type="curType"/>
     </scroll>
     <back-top v-show="showBack"
               @click.native="backTop"/>
@@ -26,6 +25,9 @@
 </template>
 
 <script>
+import methods from './methods.js'
+import data from './data.js'
+
 import HomeTop from "./children/HomeTop";
 import Scroll from "components/common/scroll/Scroll";
 import HomeSwiper from "./children/HomeSwiper";
@@ -36,8 +38,7 @@ import GoodList from "components/content/goods/GoodList";
 import BackTop from "components/content/backtop/BackTop";
 import {debounce} from "common/utils";
 
-import {MultiData,GoodData} from "network/home";
-import {goods} from "./data";
+import {MultiData} from "network/home";
 
 
 export default {
@@ -52,126 +53,29 @@ export default {
     GoodList,
     BackTop
   },
-  data()
-  {
-    return {
-      banner: {},
-      recommend: {},
-      keywords: [],
-      goods: {
-        pop:{list:[],page:1},
-        new:{list:[],page:1},
-        sell:{list:[],page:1},
-      },
-      curType: 'pop',
-      position: {
-        pop:{},
-        new:{},
-        sell:{}
-      },
-      offsetTop: 0,
-      showPlaceHolder: false,
-      scrolling: false
-    }
-  },
+  data,
   computed: {
     showBack()
     {
       return this.position[this.curType].y < -1000;
     },
-  },
-  methods: {
-    tabClick(index)
-    {
-      // 没有滚完不能切换
-      if (this.scrolling) return
-      switch (index)
-      {
-        case 0:
-          this.curType = 'pop';
-          break;
-        case 1:
-          this.curType = 'new';
-          break;
-        case 2:
-          this.curType = 'sell';
-          break;
-      }
-      this.showPlaceHolder ? this.$refs.tabControl2.currentIndex = index :
-          this.$refs.tabControl1.currentIndex = index;
-      this.$refs.scroll.onceRefresh();
-      this.$refs.scroll.offScroll();
-    },
-    refresh()
-    {
-      let scroll = this.$refs.scroll;
-      scroll.scrollTo(this.position[this.curType],0);
-      scroll.onScroll();
-    },
-    SwiperHasLoad()
-    {
-      console.log('SwiperHasLoad');
-      this.offsetTop = this.$refs.tabControl2.$el.offsetTop;
-    },
-    scroll(position)
-    {
-      this.scrolling = true;
-      this.showPlaceHolder = -position.y >= this.offsetTop;
-      if (this.showPlaceHolder)
-      {
-        for (const positionKey in this.position)
-        {
-          if (positionKey === this.curType)
-          {
-            this.position[positionKey] = position;
-          } else
-          {
-            this.position[positionKey] = {
-              ...this.position[positionKey],
-              y: Math.min(-this.offsetTop,this.position[positionKey].y)
-            }
-          }
-        }
-      } else
-      {
-        for (const positionKey in this.position)
-        {
-          this.position[positionKey] = position;
-        }
-      }
-    },
-    scrollEnd()
-    {
-      this.scrolling = false;
-    },
-    ListLoad()
-    {
-      this.$refs.scroll.refresh();
-    },
-    pullingUp()
-    {
-      console.log('上拉加载更多')
-      this.getGoodData(this.curType)
-      this.$refs.scroll.finishPullUp();
-    },
-    backTop()
-    {
-      this.$refs.scroll.scrollTo({x: 0,y: 0},500);
-    },
-    // 请求数据
-    getGoodData(type)
-    {
-      GoodData(type,this.goods[type].page).then(data => {
-        this.goods[type].list.push(...data.list);
+    curGoods(){
+      this.goods[this.curType].list.map( v => {
+        v.img = v.show.img;
+        v.coll = v.cfav;
+        return v;
       })
-    },
+      return this.goods[this.curType].list;
+    }
   },
+  methods,
   created()
   {
-    MultiData().then(data =>
+    console.log();
+    MultiData().then(response =>
     {
-      this.banner = data.banner;
-      this.recommend = data.recommend;
+      this.banner = response.data.banner;
+      this.recommend = response.data.recommend;
     });
     for (let type in this.goods)
     {
@@ -180,11 +84,23 @@ export default {
   },
   mounted()
   {
-    let refresh = debounce(this.$refs.scroll.refresh,50);
-    this.$bus.$on('itemImgLoad',() =>
+    let scroll = this.$refs.scroll;
+    scroll.oncePullingUp();
+    let refresh = debounce(50,scroll.refresh,scroll.oncePullingUp);
+    this.itemImgLoad = () =>
     {
       refresh();
-    })
+    }
+  },
+  activated() {
+    let scroll = this.$refs.scroll;
+    this.$bus.$on('itemImgLoad',this.itemImgLoad);
+    scroll.onScroll();
+    scroll.scrollTo(this.position[this.curType],0);
+  },
+  deactivated(){
+    this.$refs.scroll.offScroll();
+    this.$bus.$off('itemImgLoad',this.itemImgLoad);
   },
 }
 </script>

@@ -1,14 +1,27 @@
 <template>
   <div class="swiper">
-    <div class="wrapper"
-         ref="wrapper" :style="wrapperStyle"
-         @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend">
+    <div
+      class="wrapper"
+      ref="wrapper"
+      :style="wrapperStyle"
+      @touchstart="touchstart"
+      @touchmove="touchmove"
+      @touchend="touchend"
+    >
       <slot></slot>
     </div>
-    <div class="indicator" v-show="this.showIndicator">
+    <div
+      class="indicator"
+      v-show="count > 3 && showIndicator"
+      :style="indicatorStyle"
+    >
       <slot name="indicator">
-        <div class="indicator-icon" :class="iconClass(num)" v-for="num in (count - 2)">
-        </div>
+        <div
+          class="indicator-icon"
+          :class="iconClass(num)"
+          v-for="num in count - 2"
+          :key="num"
+        ></div>
       </slot>
     </div>
   </div>
@@ -16,16 +29,13 @@
 
 <script>
 let methods = {
-  touchstart(e)
-  {
-    if (this.scrolling)
-    {
-      console.log('早了');
+  touchstart(e) {
+    if (this.scrolling) {
+      console.log("早了");
       this.moving = false;
-      this.callback = () =>
-      {
+      this.callback = () => {
         this.touchstart(e);
-      }
+      };
       return;
     }
     this.moving = true;
@@ -35,10 +45,8 @@ let methods = {
     this.dTransTime = 0;
     this.stopTimer();
   },
-  touchmove(e)
-  {
-    if ( !this.moving)
-    {
+  touchmove(e) {
+    if (!this.moving) {
       return;
     }
     // 为正表示手指向右 为负表示向左
@@ -50,8 +58,7 @@ let methods = {
     this.check();
   },
   // 在拖动时切换index 并且检查是否需要切换index和left
-  check()
-  {
+  check() {
     // 在拖动的时候更新index 保留两位小数是因为 当-this.left = -0.00000123时
     // -this.left / this.width 的结果为负值 而正确情况下为0
     this.index = parseInt(-this.left.toFixed(2) / this.width);
@@ -61,18 +68,15 @@ let methods = {
     // this.left <= -(this.count - 1) * this.width
     // 表示到了最后一张还要往右边拖 因为第一张是实际上的第一张 所以要返回真正的第一张
     // 不直接设置为 === 是因为有误差存在
-    if (this.left >= 0 || this.left <= -(this.count - 1) * this.width)
-    {
+    if (this.left >= 0 || this.left <= -(this.count - 1) * this.width) {
       this.index = this.index === 0 ? this.count - 2 : 1;
       // 在touchstart的时候已经关掉动画效果了 所以这里不会有动画
       this.dTransTime = 0;
       this.left = -this.index * this.width;
     }
   },
-  touchend()
-  {
-    if ( !this.moving)
-    {
+  touchend() {
+    if (!this.moving) {
       return;
     }
     this.callback = null;
@@ -83,38 +87,33 @@ let methods = {
     // 因为这时候的index为当前图的index 所以如果切就scrollTo(1)切到下一张图 不切就scrollTo(0)回到当前图
     // distance > 0 看是否切上一张图
     // 注意这时候的index为上一张图的index 所以如果且就scroll(0) 不切就scroll(1)返回当前图
-    if (Math.abs(distance) >= this.width * this.ratio)
-    {
+    if (Math.abs(distance) >= this.width * this.ratio) {
       distance < 0 ? this.scrollTo(1) : this.scrollTo(0);
-    } else if (distance !== 0)
-    {
+    } else if (distance !== 0) {
       distance < 0 ? this.scrollTo(0) : this.scrollTo(1);
     }
     this.startTimer();
   },
   // 从当前left带动画的移动到index+direction所在left
-  scrollTo(direction)
-  {
+  scrollTo(direction) {
     this.curIndex = this.index;
     // 最终下标
     this.index += direction;
     // 最终下标的left值
     let end = -this.index * this.width;
     // 设置动画所需时间
-    this.dTransTime = Math.abs(this.left - end) / this.width * this.transTime;
+    this.dTransTime = (Math.abs(this.left - end) / this.width) * this.transTime;
     // 设置当前在滚动 滚动状态下不能拖动
     this.scrolling = true;
     // 设置left 动画开始
     this.left = end;
     // 当动画结束时执行下列操作
-    setTimeout(() =>
-    {
+    setTimeout(() => {
       // 设置为不滚动即可以拖动
       this.scrolling = false;
       // index为0        表示到了前面的最后一张 那么就要回到真正的最后一张 下标为 0
       // index为length-1 表示到了后面的第一张 那么就要回到真正的第一张 下标为    length - 2
-      if (this.index === 0 || this.index === this.count - 1)
-      {
+      if (this.index === 0 || this.index === this.count - 1) {
         this.index = this.index === 0 ? this.count - 2 : 1;
         // 因为要秒切 所以设置动画时间为0
         this.dTransTime = 0;
@@ -124,45 +123,42 @@ let methods = {
       // 动画结束后更新index
       this.curIndex = this.index;
       this.callback && this.callback();
-    },this.dTransTime)
+    }, this.dTransTime);
   },
   // 删除计时器
-  stopTimer()
-  {
-    console.log('停了');
+  stopTimer() {
+    console.log("停了");
     clearInterval(this.timer);
   },
-  startTimer()
-  {
-    this.timer = setInterval(() =>
-    {
-      this.scrollTo(1)
-    },this.interval)
+  startTimer() {
+    this.timer = setInterval(() => {
+      this.scrollTo(1);
+    }, this.interval);
   },
   // 设置当前导航的class是否添加
-  iconClass(index)
-  {
-    return {active: this.curIndex === index}
+  iconClass(index) {
+    return { active: this.curIndex === index };
   },
-  init()
-  {
+  init() {
     // 插入前后两张额外的图片
     let wrapper = this.$refs.wrapper;
-    let firstChild = wrapper.firstElementChild.cloneNode(true);
-    let lastChild = wrapper.lastElementChild.cloneNode(true);
-    wrapper.appendChild(firstChild);
-    wrapper.insertBefore(lastChild,wrapper.firstElementChild);
+    if (wrapper.childElementCount > 1) {
+      let firstChild = wrapper.firstElementChild.cloneNode(true);
+      let lastChild = wrapper.lastElementChild.cloneNode(true);
+      wrapper.appendChild(firstChild);
+      wrapper.insertBefore(lastChild, wrapper.firstElementChild);
 
-    this.count = wrapper.childElementCount;
-    // 计算Swiper的宽度
-    this.width = parseInt(getComputedStyle(this.$el).width);
-    wrapper.style.width = this.width * this.count + 'px';
+      this.count = wrapper.childElementCount;
+      // 计算Swiper的宽度
+      this.width = parseInt(getComputedStyle(this.$el).width);
+      wrapper.style.width = this.width * this.count + "px";
 
-    // 第一张图在-width px处
-    this.left = -this.width;
-    this.startTimer();
-    // dTransTime不需要被赋初始值 因为每次用的时候都会提前赋值 而且如果赋值的话上面设置left切第一张的时候会有动画
-  }
+      // 第一张图在-width px处
+      this.left = -this.width;
+      this.startTimer();
+      // dTransTime不需要被赋初始值 因为每次用的时候都会提前赋值 而且如果赋值的话上面设置left切第一张的时候会有动画
+    }
+  },
 };
 export default {
   methods,
@@ -171,31 +167,36 @@ export default {
     // 轮播时间
     interval: {
       type: Number,
-      default: 3000
+      default: 3000,
     },
     // 切换一张图片的时间
     transTime: {
       type: Number,
-      default: 300
+      default: 300,
     },
     // 是否显示导航按钮
     showIndicator: {
       type: Boolean,
-      default: true
+      default: true,
     },
     // 滚动多少切到下一张
     ratio: {
       type: Number,
-      default: 0.25
-    }
+      default: 0.25,
+    },
+    indicatorStyle: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
   },
-  data()
-  {
+  data() {
     return {
       // 整个swiper的宽度同时也是每一张图片的宽度
       width: 0,
       // 用户看到的图片数量
-      count: 4,
+      count: 2,
       // 当前轮播或者拖动到的下标
       index: 1,
       // list的left
@@ -208,21 +209,19 @@ export default {
       // 是否可以滑动 用于标识touchstart是否有效
       moving: false,
       // scrollTo切换完成后的回调 用于保存scrolling状态下的touchstart
-      callback: null
-    }
+      callback: null,
+    };
   },
   computed: {
     // list样式
-    wrapperStyle()
-    {
+    wrapperStyle() {
       return {
-        left: this.left + 'px',
-        transition: `left ease-in-out ${ this.dTransTime }ms`
-      }
+        left: this.left + "px",
+        transition: `left ease-in-out ${this.dTransTime}ms`,
+      };
     },
   },
-
-}
+};
 </script>
 
 <style scoped>
@@ -248,13 +247,13 @@ export default {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, .3);
+  background-color: rgba(255, 255, 255, 0.3);
   border: 2px solid transparent;
   background-clip: content-box;
 }
 
 .indicator-icon.active {
-  background-color: rgba(255, 255, 255, .8);
-  border: 2px solid rgba(255, 255, 255, .3);
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 </style>

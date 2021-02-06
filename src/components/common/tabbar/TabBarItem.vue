@@ -53,9 +53,6 @@ export default {
   height: 30px;
   margin: 3px auto 0;
 }
-.icon-img img{
-  width: 100%;
-  height: 100%;
-}
+
 
 </style>
