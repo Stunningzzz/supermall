@@ -1,5 +1,5 @@
 <template>
-  <div class="detail-item-info">
+  <div class="detail-item-info" v-if="itemInfo">
     <div class="title">
       {{ itemInfo.title }}
     </div>

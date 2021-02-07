@@ -1,5 +1,5 @@
 <template>
-  <div class="detail-recommend">
+  <div class="detail-recommend" v-if="recommends">
     <good-list :goods="recommends" />
   </div>
 </template>

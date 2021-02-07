@@ -1,29 +1,38 @@
 <template>
-  <cate-top :item="{name:{firstName:'luzhihao'}}"></cate-top>
+  <div>
+    <div ref="demo"></div>
+    {{text}}
+  </div>
 </template>
 
 <script>
 import CateTop from "./CateTop";
+import {MultiData} from 'network/home'
+
 
 export default {
   name: "Categories",
   components: {
     CateTop
   },
-  computed:{
-    str(){
-      return 123
-    }
-  },
-  data() {
+  data(){
     return {
-      num:1
-    };
-  },
-  filters:{
-    ten(value){
-      return value*10
+      item:null
     }
+  },
+  computed:{
+    text(){
+      console.log(this.item);
+      return '123';
+    }
+  },
+  created(){
+    this.item = ['z','z'];
+    MultiData().then(response => {
+      this.item = [1,2,3,4]
+    })
+  },
+  mounted(){
   }
 };
 </script>

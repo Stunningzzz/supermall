@@ -28,10 +28,12 @@ import DetailShopInfo from "./children/DetailShopInfo";
 import DetailItemDetail from "./children/DetailItemDetail";
 import DetailParams from "./children/DetailParams";
 import DetailComments from "./children/DetailComments";
-
 import DetailRecommends from "./children/DetailRecommends";
-
 import DetailBottom from "./children/DetailBottom";
+
+import data from './data.js'
+
+
 import { debounce } from "common/utils";
 
 import {
@@ -57,27 +59,7 @@ export default {
     DetailRecommends,
     Scroll,
   },
-
-  data() {
-    return {
-      topImages: [],
-      itemInfo: {},
-      shopInfo: {},
-      itemDetail: [],
-      itemParams: {},
-      comments: {},
-      recommends: [],
-      itemImgLoad: () => {},
-      position: {
-        goods: {},
-        params: {},
-        comments: {},
-        recommends: {},
-      },
-      curIndex: 0,
-      cur: { x: 0, y: 0 },
-    };
-  },
+  data,
   methods: {
     jumpTo(index) {
       let title;
@@ -117,7 +99,6 @@ export default {
   },
   created() {
     DetailData(this.$route.params.iid).then((response) => {
-      console.log(response);
       let {
         columns,
         itemInfo,
@@ -134,7 +115,6 @@ export default {
       this.comments = rate;
     });
     DetailRecommend().then((response) => {
-      console.log(response);
       this.recommends = response.data.list;
       this.recommends = this.recommends.map((v) => {
         v.img = v.image;

@@ -1,5 +1,5 @@
 <template>
-  <div class="detail-comments" v-if="Object.keys(comments).length && comments.list">
+  <div class="detail-comments" v-if="comments && comments.list">
     <div class="comments-title">
       <span class="fl">用户评论</span>
       <span class="fr">更多</span>
@@ -32,9 +32,7 @@ import { DateFormat } from "common/utils";
 export default {
   name: "DetailComments",
   props: {
-    comments: {
-      type: Object,
-    },
+    comments: Object,
   },
   data() {
     return {

@@ -1,5 +1,5 @@
 <template>
-  <div class="detail-shop-info">
+  <div class="detail-shop-info" v-if="shopInfo">
     <img :src="shopInfo.shopLogo" class="shop-img" />
     <a :href="shopInfo.shopUrl" class="shop-url">
       {{ shopInfo.shopName }}

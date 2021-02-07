@@ -1,5 +1,5 @@
 <template>
-  <div class="swiper-wrapper">
+  <div class="swiper-wrapper" v-if="topImages">
     <swiper class="detail-swiper" ref="swiper" :indicatorStyle="indicatorStyle">
       <div class="slider-item" v-for="src in topImages" :key="src">
         <img :src="src" @load="SwiperHasLoad" />
@@ -25,12 +25,10 @@ export default {
   },
   props: {
     topImages: {
-      topImages: {
         type: Array,
         default() {
           return [];
         },
-      },
     },
   },
   methods: {

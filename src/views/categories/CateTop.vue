@@ -1,6 +1,6 @@
 <template>
   <h2>
-      {{item.name.firstName}}
+      {{item}}
   </h2>
 </template>
 
@@ -9,9 +9,9 @@ export default {
   name:'CateTop',
   props:{
     item:{
-      type:Object,
+      type:Array,
       default(){
-        return {}
+        return []
       }
     }
   },

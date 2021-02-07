@@ -1,9 +1,9 @@
 <template>
-  <div class="detail-params">
+  <div class="detail-params" v-if="itemParams">
     <div class="params-info">
       <list-title :title="itemParams.info.key" />
       <table class="info-table">
-        <tr v-for="item in itemParams.info.set" >
+        <tr v-for="item in itemParams.info.set" :key="item.key">
           <td class="info-key">
             {{ item.key }}
           </td>
@@ -16,8 +16,8 @@
     <div class="params-rule">
       <list-title :title="itemParams.rule.key" />
       <table class="rule-table" v-for="table in tables">
-        <tr v-for="tr in table" :key="tr[0]">
-          <td class="rule-td" v-for="td in tr">
+        <tr  class="rule-tr" v-for="tr in table" :key="tr[0]">
+          <td v-for="td in tr">
             {{ td }}
           </td>
         </tr>
@@ -41,9 +41,7 @@ export default {
     itemParams: {
       type: Object,
       default() {
-        return {
-          info: {},
-        };
+        return {};
       },
     },
   },
@@ -66,8 +64,6 @@ export default {
         }
         return reverse;
       });
-      console.log(itemParams.rule.tables);
-      console.log(this.tables);
     },
   },
 };
@@ -96,11 +92,11 @@ export default {
   color: var(--color-tint);
   padding: 14px;
 }
-.rule-td {
-  padding: 17px px;
+.rule-tr td {
+  padding: 17px 10px;
   text-align: center;
 }
-.rule-td:not(:first-child) {
+.rule-tr:not(:first-child) td{
   color: var(--color-tint);
 }
 .params-rule {
