@@ -1,8 +1,5 @@
 
 
-let str = 'sum';
-function [str](num1,num2) {
-  return num1+num2;
+for(let key in [1,2,3]){
+  
 }
-
-

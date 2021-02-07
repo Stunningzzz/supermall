@@ -71,7 +71,6 @@ export default {
   methods,
   created()
   {
-    console.log();
     MultiData().then(response =>
     {
       this.banner = response.data.banner;
@@ -86,7 +85,8 @@ export default {
   {
     let scroll = this.$refs.scroll;
     scroll.oncePullingUp();
-    let refresh = debounce(50,scroll.refresh,scroll.oncePullingUp);
+    let refresh = debounce(50,scroll.refresh,scroll.oncePullingUp,scroll.enable);
+    this.$refs.scroll.disable();
     this.itemImgLoad = () =>
     {
       refresh();

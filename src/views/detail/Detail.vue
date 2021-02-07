@@ -10,7 +10,7 @@
       <detail-swiper :top-images="topImages" ref="goods" />
       <detail-item-info :itemInfo="itemInfo" />
       <detail-shop-info :shopInfo="shopInfo" />
-      <detail-item-detail :itemDetail="itemDetail" />
+      <detail-item-detail :itemDetail="itemDetail" @DetailImgLoad="DetailImgLoad"/>
       <detail-params :itemParams="itemParams" ref="params" />
       <detail-comments :comments="comments" ref="comments" />
       <detail-recommends :recommends="recommends" ref="recommends" />
@@ -96,6 +96,10 @@ export default {
         }
       }
     },
+    DetailImgLoad(){
+      console.log('Detail中的图片加载');
+      this.itemImgLoad();
+    }
   },
   created() {
     DetailData(this.$route.params.iid).then((response) => {

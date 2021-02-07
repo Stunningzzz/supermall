@@ -1,13 +1,10 @@
 <template>
-  <div>
-    <div ref="demo"></div>
-    {{text}}
-  </div>
+  <cate-top/>
 </template>
 
 <script>
-import CateTop from "./CateTop";
 import {MultiData} from 'network/home'
+import CateTop from './CateTop'
 
 
 export default {
@@ -17,31 +14,21 @@ export default {
   },
   data(){
     return {
-      item:null
+      item:null,
+      src:{}         
     }
-  },
-  computed:{
-    text(){
-      console.log(this.item);
-      return '123';
-    }
-  },
-  created(){
-    this.item = ['z','z'];
-    MultiData().then(response => {
-      this.item = [1,2,3,4]
-    })
   },
   mounted(){
+    console.log(this);
   }
-};
+  
+}
 </script>
 
 <style scoped>
-.red {
-  color: red;
-}
-.fs {
-  font-size: 50px;
+#aaa{
+  width: 300px;
+  height: 300px;
+  background-color: #bfa;
 }
 </style>

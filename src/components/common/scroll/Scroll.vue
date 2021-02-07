@@ -19,7 +19,7 @@ export default {
   },
   mounted() {
     this.scroll = new BScroll(this.$refs.wrapper, {
-      probeType: 3,
+      probeType: 0,
       click: true,
       pullUpLoad: true,
     });
@@ -54,9 +54,7 @@ export default {
       this.scroll.finishPullUp();
     },
     refresh(param) {
-      console.log(param, "触发refresh");
       this.scroll.refresh();
-      console.log(this.scroll.maxScrollY);
     },
     onceRefresh() {
       this.scroll.once("refresh", () => {
@@ -68,6 +66,12 @@ export default {
       this.scroll.on('refresh',() => {
         this.$emit('refresh');
       })
+    },
+    enable(){
+      this.scroll.enable();
+    },
+    disable(){
+      this.scroll.disable();
     }
   },
 };

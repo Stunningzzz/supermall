@@ -1,27 +1,23 @@
 <template>
   <h2>
-      {{item}}
+    {{aaa}}
   </h2>
 </template>
 
 <script>
+import Demo from './Demo'
+
 export default {
   name:'CateTop',
-  props:{
-    item:{
-      type:Array,
-      default(){
-        return []
-      }
-    }
+  components:{
+    Demo
   },
-  mounted(){
+  created(){
+    this.aaa = "abc";
   }
 }
 </script>
 
 <style scoped>
-.slot{
-  font-size: 50px;
-}
+  
 </style>

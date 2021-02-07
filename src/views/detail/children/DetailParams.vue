@@ -54,6 +54,9 @@ export default {
     itemParams(itemParams) {
       this.tables = itemParams.rule.tables;
       this.tables = this.tables.map((v) => {
+        if (v.length > v[0].length) {
+          return v;
+        }
         let reverse = Array(v[0].length)
           .fill(0)
           .map(() => Array(v.length).fill(0));
@@ -96,9 +99,7 @@ export default {
   padding: 17px 10px;
   text-align: center;
 }
-.rule-tr:not(:first-child) td{
-  color: var(--color-tint);
-}
+
 .params-rule {
   width: 320px;
 }
