@@ -19,60 +19,38 @@ export default {
   },
   mounted() {
     this.scroll = new BScroll(this.$refs.wrapper, {
-      probeType: 0,
+      probeType: 3,
       click: true,
       pullUpLoad: true,
+      // 让滚动时不模糊
+      useTransition: false,
     });
     this.scrollHandler = (position) => {
       this.$emit("scroll", position);
     };
-    this.scroll.on("scrollEnd", () => {
-      this.$emit("scrollEnd");
+    this.scroll.on("scroll",position => {
+      this.$emit('scroll',position);
+    })
+    this.scroll.on("pullingUp", () => {
+      this.$emit("pullingUp");
     });
   },
   methods: {
-    offScroll() {
-      this.scroll.off("scroll", this.scrollHandler);
-    },
-    onScroll() {
-      this.scroll.on("scroll", this.scrollHandler);
-    },
     scrollTo(position, delay) {
       this.scroll.scrollTo(position.x || 0, position.y || 0, delay);
     },
-    oncePullingUp() {
-      if (!this.hasPullingUp) {
-        console.log("监听PullingUp");
-        this.hasPullingUp = true;
-        this.scroll.once("pullingUp", () => {
-          this.hasPullingUp = false;
-          this.$emit("pullingUp");
-        });
-      }
-    },
-    finishPullUp() {
-      this.scroll.finishPullUp();
-    },
     refresh(param) {
+      console.log(param);
       this.scroll.refresh();
     },
-    onceRefresh() {
-      this.scroll.once("refresh", () => {
-        console.log("refresh");
+    finishPullUp(){
+      this.scroll.finishPullUp();
+    },
+    onRefresh() {
+      this.scroll.on("refresh", () => {
         this.$emit("refresh");
       });
     },
-    onRefresh() {
-      this.scroll.on('refresh',() => {
-        this.$emit('refresh');
-      })
-    },
-    enable(){
-      this.scroll.enable();
-    },
-    disable(){
-      this.scroll.disable();
-    }
   },
 };
 </script>

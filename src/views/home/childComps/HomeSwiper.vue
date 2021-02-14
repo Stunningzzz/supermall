@@ -3,7 +3,7 @@
     <a v-for="item in banner.list"
        class="slider-item"
        :href="item.link">
-      <img :src="item.image" @load="SwiperHasLoad"/>
+      <img v-lazy="item.image" @load="SwiperHasLoad"/>
     </a>
   </swiper>
 </template>

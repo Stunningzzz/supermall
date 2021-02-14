@@ -2,7 +2,7 @@
   <div class="swiper-wrapper" v-if="topImages">
     <swiper class="detail-swiper" ref="swiper" :indicatorStyle="indicatorStyle">
       <div class="slider-item" v-for="src in topImages" :key="src">
-        <img :src="src" @load="SwiperHasLoad" />
+        <img v-lazy="src" @load="SwiperHasLoad" />
       </div>
     </swiper>
   </div>

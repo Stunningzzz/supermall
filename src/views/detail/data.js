@@ -1,5 +1,6 @@
 export default function data() {
   return {
+    titles:[],
     topImages: null,
     itemInfo: null,
     shopInfo: null,
@@ -8,13 +9,7 @@ export default function data() {
     comments: null,
     recommends: null,
     itemImgLoad: () => {},
-    position: {
-      goods: {},
-      params: {},
-      comments: {},
-      recommends: {},
-    },
+    position:null,
     curIndex: 0,
-    cur: { x: 0, y: 0 },
   }
 }

@@ -31,7 +31,6 @@
 let methods = {
   touchstart(e) {
     if (this.scrolling) {
-      console.log("早了");
       this.moving = false;
       this.callback = () => {
         this.touchstart(e);
@@ -127,7 +126,6 @@ let methods = {
   },
   // 删除计时器
   stopTimer() {
-    console.log("停了");
     clearInterval(this.timer);
   },
   startTimer() {

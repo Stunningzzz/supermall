@@ -1,6 +1,6 @@
 <template>
   <div class="good-list">
-    <list-item v-for="item in goods" :item="item" :key="item.img"> </list-item>
+    <list-item v-for="item in goods" :item="item" ></list-item>
   </div>
 </template>
 
@@ -16,9 +16,6 @@ export default {
         return [];
       },
     },
-    type: {
-      type: String,
-    },
   },
   components: {
     ListItem,
@@ -27,8 +24,6 @@ export default {
 </script>
 
 <style scoped>
-
-
 .good-list {
   display: flex;
   justify-content: space-evenly;

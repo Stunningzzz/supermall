@@ -16,7 +16,7 @@ name: "TabBar"
   display: flex;
   background-color: #F6F6F6;
   text-align: center;
-  box-shadow: 0 -3px 5px rgba(100,100,100,.1);
+  box-shadow: 0 -1px rgba(100,100,100,.1);
   position: fixed;
   left: 0;
   right: 0;

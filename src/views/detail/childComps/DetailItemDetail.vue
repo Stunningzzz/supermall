@@ -4,7 +4,7 @@
     <div v-for="item in itemDetail" v-if="item.list && item.list.length > 0"  :key="item.key">
       <list-title :title="item.key" />
       <div class="detail-list">
-        <img class="detail-image" v-for="src in item.list" :key="src" :src="src" @load="itemImgLoad"/>
+        <img class="detail-image" v-for="src in item.list" :key="src" v-lazy="src" @load="DetailImgLoad"/>
       </div>
     </div>
   </div>
@@ -24,8 +24,8 @@ export default {
     },
   },
   methods:{
-    itemImgLoad(){
-      this.$bus.$emit('itemImgLoad');
+    DetailImgLoad(){
+      this.$emit('DetailImgLoad');
     }
   },
   components:{

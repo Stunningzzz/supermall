@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-const Categories = () => import ("views/categories/Categories");
+const Categories = () => import ("views/category/Category");
 const Home = () => import ("views/home/Home");
 const ShoppingCart = () => import ("views/cart/ShoppingCart");
 const Profile = () => import ("views/profile/Profile");

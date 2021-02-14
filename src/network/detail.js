@@ -14,31 +14,34 @@ export function DetailRecommend() {
 	})
 }
 export class ItemInfo {
-	constructor(columns, itemInfo, shopInfo) {
-		this.title = itemInfo.title;
-		this.prePrice = itemInfo.oldPrice;
-		this.curPrice = '¥' + itemInfo.lowNowPrice;
-		this.discDesc = itemInfo.discountDesc;
+	constructor(columns, {title,oldPrice,lowNowPrice,discountDesc}, shopInfo) {
+		this.title = title;
+		this.prePrice = oldPrice;
+		this.curPrice = '¥' + lowNowPrice;
+		this.discDesc = discountDesc;
 		this.columns = columns;
 		this.services = shopInfo.services.slice(-3);
 	}
 }
 
 export class ShopInfo {
-	constructor(shopInfo) {
-		this.shopName = shopInfo.name;
-		this.shopLogo = shopInfo.shopLogo;
-		this.shopUrl = shopInfo.shopUrl;
-		this.sells = shopInfo.cSells;
-		this.goods = shopInfo.cGoods;
-		this.score = shopInfo.score;
+	constructor({name,shopLogo,shopUrl,cSells,cGoods,score}) {
+		this.shopName = name;
+		this.shopLogo = shopLogo;
+		this.shopUrl = shopUrl;
+		this.sells = cSells;
+		this.goods = cGoods;
+		this.score = score;
 	}
 }
 
 export class ItemParams { 
-	constructor(itemParams)
+	constructor({info,rule})
 	{
-		this.info = itemParams.info;
-		this.rule = itemParams.rule;
+		if (!info && !rule) {
+			return;
+		}
+		this.info = info;
+		this.rule = rule;
 	}
 }

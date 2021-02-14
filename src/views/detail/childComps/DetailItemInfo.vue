@@ -10,7 +10,7 @@
       <div class="price-pre">
         {{ itemInfo.prePrice }}
       </div>
-      <div class="price-desc" v-show=" itemInfo.discDesc ">
+      <div class="price-desc" v-show="itemInfo.discDesc">
         {{ itemInfo.discDesc }}
       </div>
     </div>
@@ -56,7 +56,7 @@ export default {
   line-height: 22px;
   font-size: 13px;
   font-weight: bold;
-  border-bottom: 5px solid #EDEDED;
+  border-bottom: 5px solid #ededed;
 }
 .price {
   display: flex;
@@ -76,13 +76,13 @@ export default {
   margin-right: 5px;
 }
 .price-desc {
-  color: var(--color-background);
   font-size: 12px;
-  padding: 2px 8px 0;
-  border-radius: 15px;
+  color: var(--color-background);
+  border-radius: 10000px;
+  padding: 2px 10px;
   background-color: var(--color-tint);
 }
-.columns{
+.columns {
   display: flex;
   font-weight: normal;
   margin-top: 10px;

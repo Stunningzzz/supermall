@@ -1,19 +1,9 @@
-# supermall
 
-## Project setup
-```
-npm install
-```
+### 项目介绍
+本项目是B站coderwhy老师的Vue视频里面的完整练习项目 包含分类页面和个人页面 
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+有问题直接发issue 有空就会看看 或者直接加下面的群~
 
-### Compiles and minifies for production
-```
-npm run build
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+
+

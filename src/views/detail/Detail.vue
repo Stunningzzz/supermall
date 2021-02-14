@@ -1,6 +1,6 @@
 <template>
   <div id="detail">
-    <detail-top @jumpTo="jumpTo" :curIndex="curIndex" />
+    <detail-top @jumpTo="jumpTo" :curIndex="curIndex" :titles="titles"/>
     <scroll
       class="detail-scroll"
       ref="scroll"
@@ -15,23 +15,28 @@
       <detail-comments :comments="comments" ref="comments" />
       <detail-recommends :recommends="recommends" ref="recommends" />
     </scroll>
-    <detail-bottom />
+      <back-top @click.native="backTop" v-show="isShowBT"/>
+    <detail-bottom @addCart="addCart"/>
   </div>
 </template>
 
 <script>
-import DetailTop from "./children/DetailTop";
-import DetailSwiper from "./children/DetailSwiper";
+import DetailTop from "./childComps/DetailTop";
+import DetailSwiper from "./childComps/DetailSwiper";
 import Scroll from "components/common/scroll/Scroll";
-import DetailItemInfo from "./children/DetailItemInfo";
-import DetailShopInfo from "./children/DetailShopInfo";
-import DetailItemDetail from "./children/DetailItemDetail";
-import DetailParams from "./children/DetailParams";
-import DetailComments from "./children/DetailComments";
-import DetailRecommends from "./children/DetailRecommends";
-import DetailBottom from "./children/DetailBottom";
+import DetailItemInfo from "./childComps/DetailItemInfo";
+import DetailShopInfo from "./childComps/DetailShopInfo";
+import DetailItemDetail from "./childComps/DetailItemDetail";
+import DetailParams from "./childComps/DetailParams";
+import DetailComments from "./childComps/DetailComments";
+import DetailRecommends from "./childComps/DetailRecommends";
+import BackTop from 'components/content/backtop/BackTop'
+import DetailBottom from "./childComps/DetailBottom";
+
+import {backTopMixin} from 'common/mixin'
 
 import data from './data.js'
+import methods from './methods'
 
 
 import { debounce } from "common/utils";
@@ -57,50 +62,12 @@ export default {
     DetailComments,
     DetailParams,
     DetailRecommends,
+    BackTop,
     Scroll,
   },
+  mixins:[backTopMixin],
   data,
-  methods: {
-    jumpTo(index) {
-      let title;
-      switch (index) {
-        case 0:
-          title = "goods";
-          break;
-        case 1:
-          title = "params";
-          break;
-        case 2:
-          title = "comments";
-          break;
-        case 3:
-          title = "recommends";
-          break;
-      }
-      this.$refs.scroll.scrollTo(this.position[title], 0);
-    },
-    refresh() {
-      for (let key in this.position) {
-        this.position[key] = { x: 0, y: -this.$refs[key].$el.offsetTop };
-      }
-    },
-    scroll(position) {
-      this.cur = position;
-      let keys = Object.keys(this.position);
-      let y = position.y.toFixed(2);
-      for (let i = keys.length - 1; i >= 0; i--) {
-        const value = this.position[keys[i]];
-        if (y <= value.y) {
-          this.curIndex = i;
-          break;
-        }
-      }
-    },
-    DetailImgLoad(){
-      console.log('Detail中的图片加载');
-      this.itemImgLoad();
-    }
-  },
+  methods,
   created() {
     DetailData(this.$route.params.iid).then((response) => {
       let {
@@ -116,11 +83,11 @@ export default {
       this.shopInfo = new ShopInfo(shopInfo);
       this.itemDetail = detailInfo.detailImage;
       this.itemParams = new ItemParams(itemParams);
-      this.comments = rate;
+      rate.list && (this.comments = rate);
     });
     DetailRecommend().then((response) => {
       this.recommends = response.data.list;
-      this.recommends = this.recommends.map((v) => {
+      this.recommends.forEach( v => {
         v.img = v.image;
         v.coll = v.cfav;
         return v;
@@ -130,10 +97,9 @@ export default {
   mounted() {
     let scroll = this.$refs.scroll;
     scroll.onRefresh();
-    scroll.onScroll();
     let refresh = debounce(50, scroll.refresh);
     this.itemImgLoad = () => {
-      refresh();
+      refresh('Detail');
     };
     this.$bus.$on("itemImgLoad",this.itemImgLoad);
   },
@@ -146,11 +112,12 @@ export default {
 <style scoped>
 #detail {
   height: 100vh;
+  width: 100vw;
 }
 .detail-scroll {
   position: absolute;
   top: 44px;
-  bottom: 49px;
+  bottom: 49px; 
   left: 0;
   right: 0;
   z-index: 1;

@@ -1,17 +1,17 @@
 <template>
   <div class="list-item">
     <a class="list-img" @click="itemClick">
-      <img :src="item.img" @load="itemImgLoad">
+      <img v-lazy="item.img" @load="itemImgLoad">
     </a>
     <div class="item-info">
       <p class="title">{{ item.title }}</p>
-      <span class="price">{{ item.price }}</span>
+      <span class="price">¥{{ item.price }}</span>
       <span class="iconfont icon-shoucang"></span>
       <span class="coll">{{ item.coll }}</span>
     </div>
   </div>
 </template>
-
+aaa
 <script>
 export default {
   name: "ListItem",

@@ -1,5 +1,5 @@
 <template>
-  <div class="detail-comments" v-if="comments && comments.list">
+  <div class="detail-comments" v-if="comments">
     <div class="comments-title">
       <span class="fl">用户评论</span>
       <span class="fr">更多</span>

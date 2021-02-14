@@ -13,10 +13,10 @@
         </tr>
       </table>
     </div>
-    <div class="params-rule">
+    <div class="params-rule" v-if="tables.length">
       <list-title :title="itemParams.rule.key" />
       <table class="rule-table" v-for="table in tables">
-        <tr  class="rule-tr" v-for="tr in table" :key="tr[0]">
+        <tr class="rule-tr" v-for="tr in table" :key="tr[0]">
           <td v-for="td in tr">
             {{ td }}
           </td>
@@ -52,21 +52,24 @@ export default {
   },
   watch: {
     itemParams(itemParams) {
-      this.tables = itemParams.rule.tables;
-      this.tables = this.tables.map((v) => {
-        if (v.length > v[0].length) {
-          return v;
-        }
-        let reverse = Array(v[0].length)
-          .fill(0)
-          .map(() => Array(v.length).fill(0));
-        for (let i = 0; i < v.length; i++) {
-          for (let j = 0; j < v[i].length; j++) {
-            reverse[j][i] = v[i][j];
+      console.log("itemParams --- ", itemParams);
+      if (itemParams.rule) {
+        this.tables = itemParams.rule.tables;
+        this.tables = this.tables.map((v) => {
+          if (v.length > v[0].length) {
+            return v;
           }
-        }
-        return reverse;
-      });
+          let reverse = Array(v[0].length)
+            .fill(0)
+            .map(() => Array(v.length).fill(0));
+          for (let i = 0; i < v.length; i++) {
+            for (let j = 0; j < v[i].length; j++) {
+              reverse[j][i] = v[i][j];
+            }
+          }
+          return reverse;
+        });
+      }
     },
   },
 };

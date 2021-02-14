@@ -10,19 +10,10 @@ export default function data() {
       sell: { list: [], page: 1 },
     },
     curType: 'pop',
-    position: {
-      pop: {},
-      new: {},
-      sell: {}
-    },
+    position: {},
     offsetTop: 0,
     showPlaceHolder: false,
     scrolling: false,
     itemImgLoad: () => {},
-    tempPosition: {
-      pop: {},
-      new: {},
-      sell: {}
-    }
   }
 }

@@ -32,7 +32,8 @@
             >
               {{ item.score }}
             </td>
-            <td class="score-eval"
+            <td
+              class="score-eval"
               :style="
                 item.isBetter ? { color: '#EF4142' } : { color: '#4B9B10' }
               "
@@ -44,9 +45,7 @@
       </div>
     </div>
     <div class="shop-btn-outer">
-      <div class="shop-btn">
-      进店逛逛
-    </div>
+      <div class="shop-btn">进店逛逛</div>
     </div>
   </div>
 </template>
@@ -85,7 +84,7 @@ export default {
   margin-left: 3px;
   vertical-align: middle;
 }
-.shop-url{
+.shop-url {
   margin-left: 5px;
 }
 .shop-eval {
@@ -120,18 +119,18 @@ export default {
 .score td {
   padding: 5px;
 }
-.shop-btn-outer{
+.shop-btn-outer {
   padding: 15px;
-  border-bottom: 5px solid #EDEDED;
+  border-bottom: 5px solid #ededed;
 }
-.shop-btn{
-  width: 120px;
+.shop-btn {
+  width: 140px;
   line-height: 25px;
   margin: 0 auto;
   font-size: 13px;
-  padding: 2px 8px 0;
-  border-radius: 15px;
+  border-radius: 10000px;
+  
   text-align: center;
-  background-color: #F3F5F9;
+  background-color: #f3f5f9;
 }
 </style>

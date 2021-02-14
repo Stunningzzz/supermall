@@ -12,7 +12,7 @@
       <span class="iconfont icon-shoucang"></span>
       <span>收藏</span>
     </div>
-    <div class="join-cart">
+    <div class="join-cart" @click="addCart">
       <span>加入购物车</span>
     </div>
     <div class="buy">
@@ -23,7 +23,12 @@
 
 <script>
 export default {
-name: "DetailBottom"
+  name: "DetailBottom",
+  methods:{
+    addCart(){
+      this.$emit('addCart');
+    }
+  }
 }
 </script>
 
@@ -42,6 +47,11 @@ name: "DetailBottom"
   .icon{
     width: 42px;
   }
+  .iconfont{
+    margin: 0 4px 0 3px;
+    font-size: 24px;
+    line-height: 33px;
+  }
   .icon-kefu{
     color: var(--color-tint);
   }
@@ -51,11 +61,6 @@ name: "DetailBottom"
   }
   .buy{
     color: var(--color-background);
-  }
-  .iconfont{
-    font-size: 24px;
-    margin: 0 4px 0 3px;
-    line-height: 33px;
   }
   .join-cart{
     background-color: #FFE714;

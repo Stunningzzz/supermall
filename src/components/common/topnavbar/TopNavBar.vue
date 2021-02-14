@@ -20,9 +20,10 @@ export default {
 
 <style scoped>
   .top-nav-bar{
-    position: fixed;
+    position: absolute;
     top:0;
-    width: 100%;
+    left: 0;
+    right: 0;
     z-index: 20;
     line-height: 44px;
     display: flex;
@@ -35,5 +36,6 @@ export default {
 
   .top-nav-bar > .center{
     flex-grow: 1;
+    width: 0;
   }
 </style>

@@ -26,14 +26,11 @@ export default {
   name: "DetailTop",
   components: {
     TopNavBar,
-  },
-  data() {
-    return {
-      titles: ["商品", "参数", "评论", "推荐"],
-    };
+    
   },
   props:{
-    curIndex: 0,
+    curIndex: Number,
+    titles: Array,
   },
   methods: {
     goBack() {
