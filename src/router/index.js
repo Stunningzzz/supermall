@@ -39,7 +39,7 @@ const routes = [
 
 let vueRouter = new VueRouter({
 	routes,
-	mode: 'history'
+	mode: 'hash',
 });
 
 export default vueRouter;

@@ -1,7 +1,7 @@
 <template>
   <div class="item-detail" v-if="itemDetail">
     <!-- 没有图片的就不展示 -->
-    <div v-for="item in itemDetail" v-if="item.list && item.list.length > 0"  :key="item.key">
+    <div v-for="item in itemDetail" :key="item.key">
       <list-title :title="item.key" />
       <div class="detail-list">
         <img class="detail-image" v-for="src in item.list" :key="src" v-lazy="src" @load="DetailImgLoad"/>

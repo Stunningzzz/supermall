@@ -8,10 +8,10 @@
 </template>
 
 <script>
-import ProfileTop from "./chikdComps/ProfileTop";
-import ProfileLogin from "./chikdComps/ProfileLogin";
-import ProfileBalance from "./chikdComps/ProfileBalance";
-import ProfileBottom from "./chikdComps/ProfileBottom";
+import ProfileTop from "./childComps/ProfileTop";
+import ProfileLogin from "./childComps/ProfileLogin";
+import ProfileBalance from "./childComps/ProfileBalance";
+import ProfileBottom from "./childComps/ProfileBottom";
 
 export default {
   name: "Profile",

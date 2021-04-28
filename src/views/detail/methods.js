@@ -9,6 +9,7 @@ export default {
     // 参数和评论可能没有 所以要判断
     if (this.itemParams) {
       arr.push('params')
+      
       this.titles.push('参数')
     };
     if (this.comments) {
@@ -18,7 +19,7 @@ export default {
     arr.push('recommends');
     this.titles.push('推荐');
     this.position = Array(arr.length).fill(0);
-    for (let i = 0; i < this.position.length; i++) {
+    for (let i = 0; i < this.position.length; i++) { 
       this.position[i] = -this.$refs[arr[i]].$el.offsetTop;
     }
   },

@@ -69,6 +69,7 @@ export default {
   data,
   methods,
   created() {
+    console.log(this.$route.params.iid);
     DetailData(this.$route.params.iid).then((response) => {
       let {
         columns,

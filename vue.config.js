@@ -1,4 +1,6 @@
 module.exports = {
+
+  publicPath:'./',
   configureWebpack: {
     resolve: {
       extensions: [".js", ".css", ".sass", ".less"],
