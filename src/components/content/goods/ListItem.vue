@@ -5,7 +5,7 @@
     </a>
     <div class="item-info">
       <p class="title">{{ item.title }}</p>
-      <span class="price">¥{{ item.price }}</span>
+      <span class="price">{{ item.price | getStandPrice }}</span>
       <span class="iconfont icon-shoucang"></span>
       <span class="coll">{{ item.coll }}</span>
     </div>
@@ -31,6 +31,12 @@ export default {
       this.$router.push('/detail/'+this.item.iid);
     }
   },
+  filters:{
+    getStandPrice(item){
+      return /^\d/.test(item) ? '¥' + item : item;
+    }
+    // https://mylyq.github.io/supermall/dist/#/home
+  }
 }
 </script>
 
