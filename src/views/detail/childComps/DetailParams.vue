@@ -52,7 +52,6 @@ export default {
   },
   watch: {
     itemParams(itemParams) {
-      console.log("itemParams --- ", itemParams);
       if (itemParams.rule) {
         this.tables = itemParams.rule.tables;
         this.tables = this.tables.map((v) => {

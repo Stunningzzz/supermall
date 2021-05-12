@@ -40,7 +40,6 @@ export default {
       this.scroll.scrollTo(position.x || 0, position.y || 0, delay);
     },
     refresh(param) {
-      console.log(param);
       this.scroll.refresh();
     },
     finishPullUp(){

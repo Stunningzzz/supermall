@@ -35,11 +35,9 @@ export default {
       scroll.scrollTo({x:0,y:0},0);
     },
     scroll(position){
-      console.log('滚了');
       this.isShowPH = position.y < -this.offsetTop;
     },
     refresh(){
-      console.log('this.offsetTop ---- ',this.offsetTop);
       this.offsetTop = this.$refs.tabControl2.$el.offsetTop;
     },
     contentClick(index) {

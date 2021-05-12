@@ -14,7 +14,6 @@ export default {
   },
   methods: {
     show(message = "默认内容", duration = 1500) {
-      console.log('调用toast的show函数');
       this.message = message;
       setTimeout(() => {
         this.message = "";

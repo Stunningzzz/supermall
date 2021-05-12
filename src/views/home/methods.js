@@ -13,7 +13,7 @@ export default {
         this.curType = "sell";
         break;
     }
-    let {tabControl2,tabControl1} = this.$refs;
+    let { tabControl2, tabControl1 } = this.$refs;
     tabControl2.currentIndex = index;
     tabControl1.currentIndex = index;
   },
@@ -25,7 +25,6 @@ export default {
     this.isShowBT = position.y < -1000;
   },
   pullingUp() {
-    console.log("上拉加载更多");
     this.goods[this.curType].page++;
     this.getGoodData(this.curType);
     this.$refs.scroll.finishPullUp();
@@ -34,10 +33,9 @@ export default {
     this.$refs.scroll.scrollTo({ x: 0, y: 0 }, 500);
   },
   // 请求数据
-  getGoodData(type) {
-    GoodData(type, this.goods[type].page).then(response => {
-      // ...是展开运算符 它可以把数组[1,2,3] 变成 1,2,3 
-      this.goods[type].list.push(...response.data.list);
-    });
+  async getGoodData(type) {
+    let response = await GoodData(type, this.goods[type].page);
+    // ...是展开运算符 它可以把数组[1,2,3] 变成 1,2,3
+    this.goods[type].list.push(...response.data.list);
   }
 };

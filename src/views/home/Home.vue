@@ -120,7 +120,7 @@ export default {
 .scroll {
   position: absolute;
   top: 44px;
-  bottom: 49px;
+  bottom: 49pX;
   left: 0;
   right: 0;
   /* 让鼠标滚轮不能滚 */
