@@ -44,9 +44,12 @@ export default {
     this.isShowBT = position.y < -1000;
 
     if (this.showPlaceHolder) {
-      this.position[this.curType] = position.y;
       Object.keys(this.position).forEach(key => {
-        this.position[key] = Math.min(this.position[key],-this.offsetTop);
+        if (key === this.curType) {
+          this.position[this.curType] = position.y;
+        } else {
+          this.position[key] = Math.min(this.position[key], -this.offsetTop);
+        }
       });
     } else {
       Object.keys(this.position).forEach(key => {
