@@ -10,7 +10,11 @@ export default function data() {
       sell: { list: [], page: 1 },
     },
     curType: 'pop',
-    position: {},
+    position: {
+      pop:0,
+      new:0,
+      sell:0,
+    },
     offsetTop: 0,
     showPlaceHolder: false,
     scrolling: false,

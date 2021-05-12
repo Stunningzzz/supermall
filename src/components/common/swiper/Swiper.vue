@@ -8,7 +8,7 @@
       @touchmove="touchmove"
       @touchend="touchend"
     >
-      <slot ></slot>
+      <slot></slot>
     </div>
     <div
       class="indicator"
@@ -18,8 +18,8 @@
       <slot name="indicator">
         <div
           class="indicator-icon"
-          v-for="(num,index) in count - 2"
-          :class="{ active: curIndex === index }"
+          v-for="num in count - 2"
+          :class="{ active: curIndex === num }"
           :key="num"
         ></div>
       </slot>
@@ -55,7 +55,7 @@ let methods = {
     // 实时更新left
     this.left = this.left + mouseMove;
     // 更新index
-    this.index = parseInt(parseInt(-this.left)/ this.width);
+    this.index = parseInt(parseInt(-this.left) / this.width);
   },
   // check函数是为了检查是否拖动到 left >= 0 处 如果滑到了要秒切 但实际上是不可能发生的 用户最多通过真的第一张往左
   // 滑到假的最后一张
@@ -76,14 +76,14 @@ let methods = {
   //     this.left = -this.index * this.width;
   //   }
   // },
-  
+
   touchend() {
     if (!this.moving) {
       return;
     }
     this.callback = null;
     // 在move时可能移动了多张图片 而且要看的是最后一张图是否移过了ratio 通过取余拿到最后一张图移动了多少
-    let distance = (this.left - this.startLeft);
+    let distance = this.left - this.startLeft;
     // left越小表示手指越往左边
     // distance < 0 看是否切下一张图
     // 因为这时候的index为当前图的index 所以如果切就scrollTo(1)切到下一张图 不切就scrollTo(0)回到当前图
@@ -140,6 +140,11 @@ let methods = {
     // 插入前后两张额外的图片
     let wrapper = this.$refs.wrapper;
     if (wrapper.childElementCount > 1) {
+      // 最多展示五张
+      for (let i = 0; i < wrapper.children.length; i++) {
+        i > 4 && wrapper.removeChild(wrapper.children[i]) && i--;
+      }
+
       let firstChild = wrapper.firstElementChild.cloneNode(true);
       let lastChild = wrapper.lastElementChild.cloneNode(true);
       wrapper.appendChild(firstChild);

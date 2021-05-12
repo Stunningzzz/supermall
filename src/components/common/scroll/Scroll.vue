@@ -1,5 +1,8 @@
 <template>
-  <div class="wrapper" ref="wrapper">
+  <div
+    class="wrapper"
+    ref="wrapper"
+  >
     <div class="content">
       <slot></slot>
     </div>
@@ -7,14 +10,15 @@
 </template>
 
 <script>
-import BScroll from "better-scroll";
+import BScroll from 'better-scroll';
 
 export default {
-  name: "Scroll",
+  name: 'Scroll',
   data() {
     return {
       scroll: null,
       scrollHandler: null,
+      isOnScroll:false,
     };
   },
   mounted() {
@@ -26,29 +30,34 @@ export default {
       useTransition: false,
     });
     this.scrollHandler = (position) => {
-      this.$emit("scroll", position);
+      this.$emit('scroll', position);
     };
-    this.scroll.on("scroll",position => {
-      this.$emit('scroll',position);
-    })
-    this.scroll.on("pullingUp", () => {
-      this.$emit("pullingUp");
+    this.toggleScroll();
+
+    this.scroll.on('pullingUp', () => {
+      this.$emit('pullingUp');
     });
+
   },
   methods: {
+    toggleScroll() {
+      let type = this.isOnScroll ? 'off' : 'on';
+      this.isOnScroll = !this.isOnScroll;
+      this.scroll[type]('scroll',this.scrollHandler);
+    },
     scrollTo(position, delay) {
       this.scroll.scrollTo(position.x || 0, position.y || 0, delay);
     },
-    refresh(param) {
+    refresh() {
       this.scroll.refresh();
     },
-    finishPullUp(){
+    finishPullUp() {
       this.scroll.finishPullUp();
     },
     onRefresh() {
-      this.scroll.on("refresh", () => {
-        this.$emit("refresh");
-      });
+      this.scroll.on('refresh',() => {
+        this.$emit('refresh');
+      })
     },
   },
 };

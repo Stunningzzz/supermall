@@ -20,6 +20,9 @@ export default {
   components: {
     ListItem,
   },
+  created(){
+    console.log('GoodList Created');
+  },
 };
 </script>
 

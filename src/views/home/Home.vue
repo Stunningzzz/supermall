@@ -14,7 +14,10 @@
       @scroll="scroll"
       @pullingUp="pullingUp"
     >
-      <home-swiper :banner="banner" @SwiperHasLoad="SwiperHasLoad" />
+      <home-swiper
+        :banner="banner"
+        @SwiperHasLoad="SwiperHasLoad"
+      />
       <home-reco :recommends="recommend" />
       <home-weekly />
       <tab-control
@@ -22,31 +25,39 @@
         ref="tabControl2"
         @tabClick="tabClick"
       />
-      <good-list :goods="curGoods" />
+      <keep-alive>
+        <good-list
+          :goods="curGoods"
+          :key="curType"
+        />
+      </keep-alive>
     </scroll>
-    <back-top @click.native="backTop" v-show="isShowBT" />
+    <back-top
+      @click.native="backTop"
+      v-show="isShowBT"
+    />
   </div>
 </template>
 
 <script>
-import HomeTop from "./childComps/HomeTop";
-import Scroll from "components/common/scroll/Scroll";
-import HomeSwiper from "./childComps/HomeSwiper";
-import HomeReco from "./childComps/HomeReco";
-import HomeWeekly from "./childComps/HomeWeekly";
-import TabControl from "components/content/TabControl";
-import GoodList from "components/content/goods/GoodList";
-import { backTopMixin } from "common/mixin";
+import HomeTop from './childComps/HomeTop';
+import Scroll from 'components/common/scroll/Scroll';
+import HomeSwiper from './childComps/HomeSwiper';
+import HomeReco from './childComps/HomeReco';
+import HomeWeekly from './childComps/HomeWeekly';
+import TabControl from 'components/content/TabControl';
+import GoodList from 'components/content/goods/GoodList';
+import { backTopMixin } from 'common/mixin';
 
-import data from "./data.js";
-import methods from "./methods.js";
+import data from './data.js';
+import methods from './methods.js';
 
-import { debounce } from "common/utils";
+import { debounce } from 'common/utils';
 
-import { MultiData } from "network/home";
+import { MultiData } from 'network/home';
 
 export default {
-  name: "Home",
+  name: 'Home',
   components: {
     HomeWeekly,
     HomeTop,
@@ -88,18 +99,16 @@ export default {
     let scroll = this.$refs.scroll;
     let refresh = debounce(50, scroll.refresh);
     this.itemImgLoad = () => {
-      refresh("Home");
+      refresh('Home');
     };
   },
   activated() {
-    let scroll = this.$refs.scroll;
-    this.$bus.$on("itemImgLoad", this.itemImgLoad);
-    scroll.refresh();
-    scroll.scrollTo(this.position,0);
+    // let scroll = this.$refs.scroll;
+    this.$bus.$on('itemImgLoad', this.itemImgLoad);
+    // scroll.refresh();
   },
   deactivated() {
-    this.position = {x:0,y:this.$refs.scroll.scroll.y}
-    this.$bus.$off("itemImgLoad", this.itemImgLoad);
+    this.$bus.$off('itemImgLoad', this.itemImgLoad);
   },
 };
 </script>
@@ -120,7 +129,7 @@ export default {
 .scroll {
   position: absolute;
   top: 44px;
-  bottom: 49pX;
+  bottom: 49px;
   left: 0;
   right: 0;
   /* 让鼠标滚轮不能滚 */
